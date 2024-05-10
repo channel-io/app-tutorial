@@ -28,6 +28,9 @@ type Config struct {
 	Log struct {
 		Debug bool
 	}
+	Bot struct {
+		Name string `required:"true"`
+	}
 }
 
 var config *Config

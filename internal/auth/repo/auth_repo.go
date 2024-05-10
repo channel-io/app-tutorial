@@ -13,15 +13,16 @@ type AuthRepo interface {
 	Get(ctx context.Context, mock model.Token) (model.Token, error)
 }
 
-func NewAuthRepo() AuthRepo {
-	return &authRepo{}
+func NewAuthRepo(cache *cache.Cache) AuthRepo {
+	return &authRepo{cache}
 }
 
-type authRepo struct{}
+type authRepo struct {
+	cache *cache.Cache
+}
 
 func (r *authRepo) Save(ctx context.Context, token model.Token) (model.Token, error) {
-	cc := cache.Get()
-	cc.Set(token.Key(), token, token.Duration())
+	r.cache.Set(token.Key(), token, token.Duration())
 
 	saved, err := r.Get(ctx, token)
 	if err != nil {
@@ -32,8 +33,7 @@ func (r *authRepo) Save(ctx context.Context, token model.Token) (model.Token, er
 }
 
 func (r *authRepo) Get(ctx context.Context, mock model.Token) (model.Token, error) {
-	cc := cache.Get()
-	v, found := cc.Get(mock.Key())
+	v, found := r.cache.Get(mock.Key())
 	if !found {
 		return nil, errors.New("token not found")
 	}
