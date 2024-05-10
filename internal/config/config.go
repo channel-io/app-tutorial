@@ -30,6 +30,9 @@ type Config struct {
 	AppStore struct {
 		BaseURL string `required:"true"`
 	}
+	Log struct {
+		Debug bool
+	}
 }
 
 var config *Config

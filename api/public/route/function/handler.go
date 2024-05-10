@@ -10,6 +10,11 @@ import (
 	"github.com/gin-gonic/gin/binding"
 )
 
+const (
+	tutorialMethod  = "tutorial"
+	sendAsBotMethod = "sendAsBot"
+)
+
 type Handler struct {
 }
 
@@ -34,10 +39,10 @@ func (h *Handler) Function(ctx *gin.Context) {
 
 	var res *dto.JsonFunctionResponse
 	switch req.Method {
-	case "tutorial":
+	case tutorialMethod:
 		res = h.tutorial()
-	case "tutorialSendMessage":
-		res = h.sendMessage()
+	case sendAsBotMethod:
+		res = h.sendAsBot()
 	default:
 		ctx.JSON(
 			http.StatusOK,
@@ -57,6 +62,6 @@ func (h *Handler) tutorial() *dto.JsonFunctionResponse {
 	panic("not implemented")
 }
 
-func (h *Handler) sendMessage() *dto.JsonFunctionResponse {
+func (h *Handler) sendAsBot() *dto.JsonFunctionResponse {
 	panic("not implemented")
 }

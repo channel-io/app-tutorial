@@ -7,9 +7,7 @@ import (
 	"github.com/channel-io/app-tutorial/internal"
 
 	"github.com/channel-io/app-tutorial/internal/config"
-	"github.com/channel-io/app-tutorial/internal/configfx"
 	"github.com/channel-io/app-tutorial/internal/http"
-	"github.com/channel-io/app-tutorial/internal/httpfx"
 
 	"go.uber.org/fx"
 )
@@ -39,8 +37,6 @@ func main() {
 func internalModule() fx.Option {
 	return fx.Module(
 		"internal",
-		configfx.Option,
-		httpfx.Option,
 		internal.Option,
 	)
 }

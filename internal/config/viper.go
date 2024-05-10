@@ -57,6 +57,7 @@ func Load() (*Config, error) {
 func fillDefaultValues() {
 	viper.SetDefault("stage", string(StageDevelopment))
 	viper.SetDefault("api.public.http.port", "3021")
+	viper.SetDefault("log.debug", true)
 }
 
 func fillBuildInfo() {
