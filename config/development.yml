@@ -1,0 +1,20 @@
+stage: development
+
+appId: # app id registered in app-store
+
+# do not use (client id, client secret) of (manager || user) type roles.
+clientId: # client id registered in app-store
+clientSecret: # client secret of client id
+
+api:
+  public:
+    http:
+      port: 3021
+
+auth:
+  authGeneralUrl: http://localhost:8080
+  authAdminUrl: http://localhost:8081
+  jwtServiceKey: 
+
+appStore:
+  baseUrl: http://localhost:3020
