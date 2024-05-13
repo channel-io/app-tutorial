@@ -40,7 +40,7 @@ func (r *authRepo) Get(ctx context.Context, mock model.Token) (model.Token, erro
 
 	save, ok := v.(model.Token)
 	if !ok {
-		return nil, errors.New("broken token")
+		return nil, errors.New("invalid token")
 	}
 
 	return save, nil

@@ -5,11 +5,11 @@ type Stage = string
 const StageDevelopment Stage = "development"
 
 type Config struct {
-	Stage        string `required:"true" name:"config.stage"`
-	AppID        string `required:"false"`
-	ClientID     string `required:"false"`
-	ClientSecret string `required:"false"`
-	Meta         struct {
+	Stage     string `required:"true" name:"config.stage"`
+	AppID     string `required:"false"`
+	AppSecret string `required:"true"`
+	ClientID  string `required:"false"`
+	Meta      struct {
 		Version   string
 		Commit    string
 		BuildTime string
@@ -21,11 +21,6 @@ type Config struct {
 				Port string
 			}
 		}
-	}
-	Auth struct {
-		AuthGeneralURL string `required:"true"`
-		AuthAdminURL   string `required:"true"`
-		JWTServiceKey  string `required:"true"`
 	}
 	AppStore struct {
 		BaseURL string `required:"true"`

@@ -2,19 +2,10 @@ package svc
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/channel-io/app-tutorial/internal/auth/infra"
-	"github.com/channel-io/app-tutorial/internal/auth/infra/dto"
 	"github.com/channel-io/app-tutorial/internal/auth/model"
 	"github.com/channel-io/app-tutorial/internal/auth/repo"
-	"github.com/channel-io/app-tutorial/internal/config"
-)
-
-const (
-	clientCredentialsGrantType = "client_credentials"
-	refreshGrantType           = "refresh"
-	scope                      = "scope=app-%s&scope=channel-%s"
 )
 
 type AuthSVC interface {
@@ -73,21 +64,10 @@ func (s *authSVC) issueToken(
 	ctx context.Context,
 	channelID string,
 ) (model.AccessToken, model.RefreshToken, error) {
-	cfg := config.Get()
-
-	nt, err := s.client.IssueToken(
-		ctx,
-		&dto.TokenRequest{
-			GrantType:    clientCredentialsGrantType,
-			Scope:        fmt.Sprintf(scope, cfg.AppID, channelID),
-			ClientID:     cfg.ClientID,
-			ClientSecret: cfg.ClientSecret,
-		},
-	)
+	nt, err := s.client.IssueToken(ctx, channelID)
 	if err != nil {
 		return "", "", err
 	}
-
 	return model.AccessToken(nt.AccessToken), model.RefreshToken(nt.RefreshToken), nil
 }
 
@@ -95,20 +75,9 @@ func (s *authSVC) refreshToken(
 	ctx context.Context,
 	refreshToken model.RefreshToken,
 ) (model.AccessToken, model.RefreshToken, error) {
-	cfg := config.Get()
-
-	nt, err := s.client.IssueToken(
-		ctx,
-		&dto.TokenRequest{
-			GrantType:    refreshGrantType,
-			ClientID:     cfg.ClientID,
-			ClientSecret: cfg.ClientSecret,
-			RefreshToken: string(refreshToken),
-		},
-	)
+	nt, err := s.client.RefreshToken(ctx, string(refreshToken))
 	if err != nil {
 		return "", "", err
 	}
-
 	return model.AccessToken(nt.AccessToken), model.RefreshToken(nt.RefreshToken), nil
 }

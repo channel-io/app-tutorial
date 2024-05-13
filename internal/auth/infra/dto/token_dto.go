@@ -1,11 +1,12 @@
 package dto
 
-type TokenRequest struct {
-	GrantType    string `json:"grant_type"`
-	Scope        string `json:"scope"`
-	ClientID     string `json:"client_id"`
-	ClientSecret string `json:"client_secret"`
-	RefreshToken string `json:"refresh_token"`
+type IssueTokenParams struct {
+	Secret    string `json:"secret"`
+	ChannelID string `json:"channelId"`
+}
+
+type RefreshTokenParams struct {
+	RefreshToken string `json:"refreshToken"`
 }
 
 type TokenResponse struct {

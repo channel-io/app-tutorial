@@ -7,6 +7,8 @@ import (
 	"github.com/channel-io/app-tutorial/internal/config"
 )
 
+type AppSecret string
+
 type Token interface {
 	Key() string
 	Duration() time.Duration
