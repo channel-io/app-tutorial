@@ -22,10 +22,10 @@ func NewAuthSVC(client infra.AuthClient, repo repo.AuthRepo) AuthSVC {
 }
 
 func (s *authSVC) GetValidToken(ctx context.Context, channelID string) (*model.AccessToken, error) {
-	var nat model.AccessToken
-	var nrt model.RefreshToken
+	var validAT model.AccessToken
+	var validRT model.RefreshToken
 
-	at, err := s.repo.Get(ctx, nat)
+	at, err := s.repo.Get(ctx, validAT)
 	if err != nil {
 		return nil, err
 	}
@@ -34,30 +34,30 @@ func (s *authSVC) GetValidToken(ctx context.Context, channelID string) (*model.A
 		return &v, nil
 	}
 
-	rt, err := s.repo.Get(ctx, nrt)
+	rt, err := s.repo.Get(ctx, validRT)
 	if v, ok := rt.(model.RefreshToken); err != nil || !ok {
 		a, r, err := s.issueToken(ctx, channelID)
 		if err != nil {
 			return nil, err
 		}
-		nat, nrt = a, r
+		validAT, validRT = a, r
 	} else {
 		a, r, err := s.refreshToken(ctx, v)
 		if err != nil {
 			return nil, err
 		}
-		nat, nrt = a, r
+		validAT, validRT = a, r
 	}
 
-	if _, err := s.repo.Save(ctx, nat); err != nil {
+	if _, err := s.repo.Save(ctx, validAT); err != nil {
 		return nil, err
 	}
 
-	if _, err := s.repo.Save(ctx, nrt); err != nil {
+	if _, err := s.repo.Save(ctx, validRT); err != nil {
 		return nil, err
 	}
 
-	return &nat, nil
+	return &validAT, nil
 }
 
 func (s *authSVC) issueToken(

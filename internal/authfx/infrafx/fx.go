@@ -10,13 +10,16 @@ import (
 	"go.uber.org/fx"
 )
 
-const timeout = time.Second * 10
+const (
+	timeout = time.Second * 10
+	tag     = `name:"auth"`
+)
 
 var Option = fx.Options(
 	fx.Supply(
 		fx.Annotate(
 			http.DefaultTransport,
-			fx.ResultTags(`name:"auth"`),
+			fx.ResultTags(tag),
 			fx.As(new(http.RoundTripper)),
 		),
 	),
@@ -28,14 +31,14 @@ var Option = fx.Options(
 				ret.SetTransport(tripper)
 				return ret
 			},
-			fx.ParamTags(`name:"auth"`),
-			fx.ResultTags(`name:"auth"`),
+			fx.ParamTags(tag),
+			fx.ResultTags(tag),
 		),
 	),
 	fx.Provide(
 		fx.Annotate(
 			infra.NewAuthClient,
-			fx.ParamTags(`name:"auth"`),
+			fx.ParamTags(tag),
 		),
 	),
 )
