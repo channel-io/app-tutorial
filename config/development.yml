@@ -12,3 +12,6 @@ api:
 
 appStore:
   baseUrl: http://localhost:3020
+
+bot:
+  name: AppTutorialBot

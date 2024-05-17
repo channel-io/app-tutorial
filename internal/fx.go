@@ -1,6 +1,7 @@
 package internal
 
 import (
+	"github.com/channel-io/app-tutorial/internal/appstorefx"
 	"github.com/channel-io/app-tutorial/internal/authfx"
 	"github.com/channel-io/app-tutorial/internal/cachefx"
 	"github.com/channel-io/app-tutorial/internal/configfx"
@@ -13,4 +14,5 @@ var Option = fx.Options(
 	httpfx.Option,
 	cachefx.Option,
 	authfx.Option,
+	appstorefx.Option,
 )

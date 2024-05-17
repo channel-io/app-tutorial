@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 
+	nativedto "github.com/channel-io/app-tutorial/internal/appstore/infra/dto"
 	"github.com/channel-io/app-tutorial/internal/auth/infra/dto"
 	"github.com/channel-io/app-tutorial/internal/config"
 
@@ -35,7 +36,7 @@ type authClient struct {
 }
 
 func (c *authClient) IssueToken(ctx context.Context, channelID string) (*dto.TokenResponse, error) {
-	body := dto.NativeFunctionRequest[dto.IssueTokenParams]{
+	body := nativedto.NativeFunctionRequest[dto.IssueTokenParams]{
 		Method: issueTokenMethod,
 		Params: dto.IssueTokenParams{
 			Secret:    config.Get().AppSecret,
@@ -59,7 +60,7 @@ func (c *authClient) IssueToken(ctx context.Context, channelID string) (*dto.Tok
 }
 
 func (c *authClient) RefreshToken(ctx context.Context, refreshToken string) (*dto.TokenResponse, error) {
-	body := dto.NativeFunctionRequest[dto.RefreshTokenParams]{
+	body := nativedto.NativeFunctionRequest[dto.RefreshTokenParams]{
 		Method: refreshTokenMethod,
 		Params: dto.RefreshTokenParams{
 			RefreshToken: refreshToken,
