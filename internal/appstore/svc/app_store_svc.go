@@ -3,13 +3,13 @@ package svc
 import (
 	"context"
 	"encoding/json"
-	"errors"
 
 	"github.com/channel-io/app-tutorial/internal/appstore/infra"
 	infradto "github.com/channel-io/app-tutorial/internal/appstore/infra/dto"
 	"github.com/channel-io/app-tutorial/internal/appstore/svc/dto"
 	"github.com/channel-io/app-tutorial/internal/auth/svc"
 	"github.com/channel-io/app-tutorial/internal/config"
+	"github.com/pkg/errors"
 )
 
 type AppStoreSVC interface {
@@ -31,7 +31,7 @@ func (s *appStoreSVC) WritePlainTextToGroup(
 ) (json.RawMessage, error) {
 	t, err := s.svc.GetValidToken(ctx, msg.ChannelID)
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrapf(err, "failed to send a plaintext message to the group")
 	}
 	if t == nil {
 		return nil, errors.New("nil access token")
@@ -52,7 +52,7 @@ func (s *appStoreSVC) WritePlainTextToGroup(
 		},
 	)
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrapf(err, "failed to send a plaintext message to the group")
 	}
 
 	return resp, nil

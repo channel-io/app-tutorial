@@ -18,11 +18,8 @@ const appName = "app-tutorial"
 func main() {
 	fx.New(
 		public.HTTPServerModule(),
-
 		internalModule(),
-
 		fx.Invoke(printLog),
-
 		fx.Invoke(
 			fx.Annotate(
 				func(_ []*http.Server) error {

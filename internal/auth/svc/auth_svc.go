@@ -46,12 +46,12 @@ func (s *authSVC) GetValidToken(ctx context.Context, channelID string) (*model.A
 func (s *authSVC) tryAccessToken(ctx context.Context, channelID string) (*model.AccessToken, error) {
 	t, err := s.repo.Get(ctx, &model.AccessToken{ChannelID: channelID})
 	if err != nil {
-		return nil, errors.Wrapf(err, "failed to get a token")
+		return nil, err
 	}
 
 	v, ok := t.(model.AccessToken)
 	if !ok {
-		return nil, errors.New("failed to get a token")
+		return nil, errors.New("invalid access token")
 	}
 
 	return &v, nil
@@ -61,18 +61,18 @@ func (s *authSVC) tryRefreshToken(ctx context.Context, channelID string) (*model
 	if rt, err := s.repo.Get(ctx, &model.RefreshToken{ChannelID: channelID}); err == nil {
 		v, ok := rt.(model.RefreshToken)
 		if !ok {
-			return nil, nil, errors.Wrapf(err, "failed to refresh the token")
+			return nil, nil, errors.New("invalid refresh token")
 		}
 
 		if a, r, err := s.refreshToken(ctx, v); err != nil {
-			return nil, nil, errors.Wrapf(err, "failed to refresh the token")
+			return nil, nil, err
 		} else {
 			return a, r, nil
 		}
 	}
 
 	if a, r, err := s.issueToken(ctx, channelID); err != nil {
-		return nil, nil, errors.Wrapf(err, "failed to issue a new token")
+		return nil, nil, err
 	} else {
 		return a, r, nil
 	}
