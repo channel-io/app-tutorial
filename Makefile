@@ -33,7 +33,13 @@ env:
 init:
 	go mod tidy
 
-build: init
+build-wam:
+	@echo "Building WAMs..."
+	cd ${PROJECT_PATH}/wam; \
+	yarn install; \
+	yarn build
+
+build: init build-wam
 	GOOS=${GOOS} \
 	GOARCH=${GOARCH} \
 	go build ${LDFLAGS} \
