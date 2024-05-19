@@ -7,6 +7,7 @@ import (
 
 	"github.com/channel-io/app-tutorial/internal/appstore/infra/dto"
 	"github.com/channel-io/app-tutorial/internal/config"
+	native "github.com/channel-io/app-tutorial/internal/native/dto"
 
 	"github.com/go-resty/resty/v2"
 )
@@ -52,7 +53,7 @@ func (c *appStoreClient) WriteGroupMessage(
 		SetContext(ctx).
 		SetHeader("x-access-token", token).
 		SetBody(
-			dto.NativeFunctionRequest[dto.WriteGroupMessageParams]{
+			native.NativeFunctionRequest[dto.WriteGroupMessageParams]{
 				Method: "writeGroupMessage",
 				Params: params,
 			},
@@ -62,7 +63,7 @@ func (c *appStoreClient) WriteGroupMessage(
 		return nil, err
 	}
 
-	return unmarshalJson(resp, &dto.NativeFunctionResponse{})
+	return unmarshalJson(resp, &native.NativeFunctionResponse{})
 }
 
 func (c *appStoreClient) WriteDirectChatMessage(
@@ -74,7 +75,7 @@ func (c *appStoreClient) WriteDirectChatMessage(
 		SetContext(ctx).
 		SetHeader("x-access-token", token).
 		SetBody(
-			dto.NativeFunctionRequest[dto.WriteDirectChatMessageParams]{
+			native.NativeFunctionRequest[dto.WriteDirectChatMessageParams]{
 				Method: "writeDirectChatMessage",
 				Params: params,
 			},
@@ -84,7 +85,7 @@ func (c *appStoreClient) WriteDirectChatMessage(
 		return nil, err
 	}
 
-	return unmarshalJson(resp, &dto.NativeFunctionResponse{})
+	return unmarshalJson(resp, &native.NativeFunctionResponse{})
 }
 
 func (c *appStoreClient) WriteUserChatMessage(
@@ -96,7 +97,7 @@ func (c *appStoreClient) WriteUserChatMessage(
 		SetContext(ctx).
 		SetHeader("x-access-token", token).
 		SetBody(
-			dto.NativeFunctionRequest[dto.WriteUserChatMessageParams]{
+			native.NativeFunctionRequest[dto.WriteUserChatMessageParams]{
 				Method: "writeUserChatMessage",
 				Params: params,
 			},
@@ -106,12 +107,12 @@ func (c *appStoreClient) WriteUserChatMessage(
 		return nil, err
 	}
 
-	return unmarshalJson(resp, &dto.NativeFunctionResponse{})
+	return unmarshalJson(resp, &native.NativeFunctionResponse{})
 }
 
 func unmarshalJson(
 	response *resty.Response,
-	nativeResponse *dto.NativeFunctionResponse,
+	nativeResponse *native.NativeFunctionResponse,
 ) (json.RawMessage, error) {
 	if err := json.Unmarshal(response.Body(), &nativeResponse); err != nil {
 		return nil, err
