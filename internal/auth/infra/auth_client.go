@@ -4,9 +4,9 @@ import (
 	"context"
 	"encoding/json"
 
-	nativedto "github.com/channel-io/app-tutorial/internal/appstore/infra/dto"
 	"github.com/channel-io/app-tutorial/internal/auth/infra/dto"
 	"github.com/channel-io/app-tutorial/internal/config"
+	native "github.com/channel-io/app-tutorial/internal/native/dto"
 
 	"github.com/go-resty/resty/v2"
 )
@@ -36,7 +36,7 @@ type authClient struct {
 }
 
 func (c *authClient) IssueToken(ctx context.Context, channelID string) (*dto.TokenResponse, error) {
-	body := nativedto.NativeFunctionRequest[dto.IssueTokenParams]{
+	body := native.NativeFunctionRequest[dto.IssueTokenParams]{
 		Method: issueTokenMethod,
 		Params: dto.IssueTokenParams{
 			Secret:    config.Get().AppSecret,
@@ -52,15 +52,20 @@ func (c *authClient) IssueToken(ctx context.Context, channelID string) (*dto.Tok
 		return nil, err
 	}
 
+	var nres native.NativeFunctionResponse
+	if err := json.Unmarshal(res.Body(), &nres); err != nil {
+		return nil, err
+	}
+
 	var tres dto.TokenResponse
-	if err := json.Unmarshal(res.Body(), &tres); err != nil {
+	if err := json.Unmarshal(nres.Result, &tres); err != nil {
 		return nil, err
 	}
 	return &tres, nil
 }
 
 func (c *authClient) RefreshToken(ctx context.Context, refreshToken string) (*dto.TokenResponse, error) {
-	body := nativedto.NativeFunctionRequest[dto.RefreshTokenParams]{
+	body := native.NativeFunctionRequest[dto.RefreshTokenParams]{
 		Method: refreshTokenMethod,
 		Params: dto.RefreshTokenParams{
 			RefreshToken: refreshToken,
@@ -75,8 +80,13 @@ func (c *authClient) RefreshToken(ctx context.Context, refreshToken string) (*dt
 		return nil, err
 	}
 
+	var nres native.NativeFunctionResponse
+	if err := json.Unmarshal(res.Body(), &nres); err != nil {
+		return nil, err
+	}
+
 	var tres dto.TokenResponse
-	if err := json.Unmarshal(res.Body(), &tres); err != nil {
+	if err := json.Unmarshal(nres.Result, &tres); err != nil {
 		return nil, err
 	}
 	return &tres, nil

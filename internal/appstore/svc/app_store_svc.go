@@ -39,7 +39,7 @@ func (s *appStoreSVC) WritePlainTextToGroup(
 
 	resp, err := s.client.WriteGroupMessage(
 		ctx,
-		string(*t),
+		t.Token,
 		infradto.WriteGroupMessageParams{
 			ChannelID:     msg.ChannelID,
 			GroupID:       msg.GroupID,

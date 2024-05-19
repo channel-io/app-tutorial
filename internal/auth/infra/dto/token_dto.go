@@ -10,12 +10,7 @@ type RefreshTokenParams struct {
 }
 
 type TokenResponse struct {
-	AccessToken           string   `json:"access_token"`
-	RefreshToken          string   `json:"refresh_token"`
-	TokenType             string   `json:"token_type"`
-	ExpiresAt             int64    `json:"expires_at"`
-	ExpiresIn             int64    `json:"expires_in"`
-	RefreshTokenExpiresAt int64    `json:"refresh_token_expires_at"`
-	RefreshTokenExpiresIn int64    `json:"refresh_token_expires_in"`
-	Scope                 []string `json:"scope"`
+	AccessToken  string `json:"accessToken"`
+	RefreshToken string `json:"refreshToken"`
+	ExpiresIn    int64  `json:"expiresIn"`
 }

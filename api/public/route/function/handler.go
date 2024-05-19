@@ -22,7 +22,8 @@ const (
 )
 
 const (
-	tutorialMsg = "This is a test message sent by a manager."
+	tutorialMsg  = "This is a test message sent by a manager."
+	sendAsBotMsg = "This is a test message sent by a bot."
 )
 
 const (
@@ -97,10 +98,9 @@ func (h *Handler) tutorial(
 	}
 
 	tutorialRes := dto.TutorialResult{
-		AppID:    cfg.AppID,
-		ClientID: cfg.ClientID,
-		Name:     "tutorial",
-		WamArgs:  wamArgs,
+		AppID:   cfg.AppID,
+		Name:    "tutorial",
+		WamArgs: wamArgs,
 	}
 
 	data, err := json.Marshal(tutorialRes)
@@ -125,8 +125,8 @@ func (h *Handler) sendAsBot(
 	params json.RawMessage,
 	fnCtx dto.Context,
 ) *dto.JsonFunctionResponse {
-	var tp dto.SendAsBotParams
-	if err := json.Unmarshal(params, &tp); err != nil {
+	var param dto.SendAsBotParams
+	if err := json.Unmarshal(params, &param); err != nil {
 		return &dto.JsonFunctionResponse{
 			Error: &dto.Error{
 				Message: "failed to unmarshal the function",
@@ -138,20 +138,19 @@ func (h *Handler) sendAsBot(
 		ctx,
 		appstoredto.PlainTextGroupMessage{
 			ChannelID: fnCtx.Channel.ID,
-			GroupID:   tp.GroupID,
+			GroupID:   param.GroupID,
+			Message:   sendAsBotMsg,
 		},
 	)
 	if err != nil {
 		return &dto.JsonFunctionResponse{
 			Error: &dto.Error{
-				Message: "failed to send message as bot",
+				Message: "failed to send message as a bot",
 			},
 		}
 	}
 
-	sendRes := dto.SendAsBotResult{
-		Message: tp.Message,
-	}
+	sendRes := dto.SendAsBotResult{}
 
 	data, err := json.Marshal(sendRes)
 	if err != nil {
