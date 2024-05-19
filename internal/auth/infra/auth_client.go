@@ -7,6 +7,7 @@ import (
 	"github.com/channel-io/app-tutorial/internal/auth/infra/dto"
 	"github.com/channel-io/app-tutorial/internal/config"
 	native "github.com/channel-io/app-tutorial/internal/native/dto"
+	"github.com/pkg/errors"
 
 	"github.com/go-resty/resty/v2"
 )
@@ -49,17 +50,17 @@ func (c *authClient) IssueToken(ctx context.Context, channelID string) (*dto.Tok
 		SetBody(body).
 		Put(accessTokenPath)
 	if err != nil || res.IsError() {
-		return nil, err
+		return nil, errors.Wrapf(err, "failed to request issueToken")
 	}
 
 	var nres native.NativeFunctionResponse
 	if err := json.Unmarshal(res.Body(), &nres); err != nil {
-		return nil, err
+		return nil, errors.Wrapf(err, "failed to request issueToken")
 	}
 
 	var tres dto.TokenResponse
 	if err := json.Unmarshal(nres.Result, &tres); err != nil {
-		return nil, err
+		return nil, errors.Wrapf(err, "failed to request issueToken")
 	}
 	return &tres, nil
 }
@@ -77,17 +78,17 @@ func (c *authClient) RefreshToken(ctx context.Context, refreshToken string) (*dt
 		SetBody(body).
 		Put(accessTokenPath)
 	if err != nil || res.IsError() {
-		return nil, err
+		return nil, errors.Wrapf(err, "failed to request refreshToken")
 	}
 
 	var nres native.NativeFunctionResponse
 	if err := json.Unmarshal(res.Body(), &nres); err != nil {
-		return nil, err
+		return nil, errors.Wrapf(err, "failed to request refreshToken")
 	}
 
 	var tres dto.TokenResponse
 	if err := json.Unmarshal(nres.Result, &tres); err != nil {
-		return nil, err
+		return nil, errors.Wrapf(err, "failed to request refreshToken")
 	}
 	return &tres, nil
 }

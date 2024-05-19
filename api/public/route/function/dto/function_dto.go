@@ -26,10 +26,10 @@ type Trigger struct {
 	Attributes map[string]string `json:"attributes"`
 }
 
-type CommandParams struct {
+type FunctionParams struct {
 	Chat    Chat            `json:"chat"`
 	Trigger Trigger         `json:"trigger"`
-	Input   json.RawMessage `json:"input"` // function params; slice or object
+	Input   json.RawMessage `json:"input"` // param for each function; slice or struct
 }
 
 type FunctionResult struct {
@@ -38,9 +38,9 @@ type FunctionResult struct {
 }
 
 type JsonFunctionRequest struct {
-	Method  string        `json:"method"`
-	Params  CommandParams `json:"params"`
-	Context Context       `json:"context"`
+	Method  string         `json:"method"`
+	Params  FunctionParams `json:"params"`
+	Context Context        `json:"context"`
 }
 
 type JsonFunctionResponse struct {

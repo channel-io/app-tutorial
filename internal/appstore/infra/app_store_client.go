@@ -3,11 +3,11 @@ package infra
 import (
 	"context"
 	"encoding/json"
-	"errors"
 
 	"github.com/channel-io/app-tutorial/internal/appstore/infra/dto"
 	"github.com/channel-io/app-tutorial/internal/config"
 	native "github.com/channel-io/app-tutorial/internal/native/dto"
+	"github.com/pkg/errors"
 
 	"github.com/go-resty/resty/v2"
 )
@@ -15,21 +15,7 @@ import (
 const path = "/general/v1/native/functions"
 
 type AppStoreClient interface {
-	WriteGroupMessage(
-		ctx context.Context,
-		token string,
-		params dto.WriteGroupMessageParams,
-	) (json.RawMessage, error)
-	WriteDirectChatMessage(
-		ctx context.Context,
-		token string,
-		params dto.WriteDirectChatMessageParams,
-	) (json.RawMessage, error)
-	WriteUserChatMessage(
-		ctx context.Context,
-		token string,
-		params dto.WriteUserChatMessageParams,
-	) (json.RawMessage, error)
+	WriteGroupMessage(ctx context.Context, token string, params dto.WriteGroupMessageParams) (json.RawMessage, error)
 }
 
 func NewAppStoreClient(client *resty.Client, e *config.Config) AppStoreClient {
@@ -60,51 +46,7 @@ func (c *appStoreClient) WriteGroupMessage(
 		).
 		Put(path)
 	if err != nil || resp.IsError() {
-		return nil, err
-	}
-
-	return unmarshalJson(resp, &native.NativeFunctionResponse{})
-}
-
-func (c *appStoreClient) WriteDirectChatMessage(
-	ctx context.Context,
-	token string,
-	params dto.WriteDirectChatMessageParams,
-) (json.RawMessage, error) {
-	resp, err := c.R().
-		SetContext(ctx).
-		SetHeader("x-access-token", token).
-		SetBody(
-			native.NativeFunctionRequest[dto.WriteDirectChatMessageParams]{
-				Method: "writeDirectChatMessage",
-				Params: params,
-			},
-		).
-		Put(path)
-	if err != nil || resp.IsError() {
-		return nil, err
-	}
-
-	return unmarshalJson(resp, &native.NativeFunctionResponse{})
-}
-
-func (c *appStoreClient) WriteUserChatMessage(
-	ctx context.Context,
-	token string,
-	params dto.WriteUserChatMessageParams,
-) (json.RawMessage, error) {
-	resp, err := c.R().
-		SetContext(ctx).
-		SetHeader("x-access-token", token).
-		SetBody(
-			native.NativeFunctionRequest[dto.WriteUserChatMessageParams]{
-				Method: "writeUserChatMessage",
-				Params: params,
-			},
-		).
-		Put(path)
-	if err != nil || resp.IsError() {
-		return nil, err
+		return nil, errors.Wrapf(err, "failed to request writeGroupMessage")
 	}
 
 	return unmarshalJson(resp, &native.NativeFunctionResponse{})
@@ -118,7 +60,7 @@ func unmarshalJson(
 		return nil, err
 	}
 	if nativeResponse.Error.Type != "" || nativeResponse.Error.Message != "" {
-		return nil, errors.New(nativeResponse.Error.Message)
+		return nil, errors.Errorf(nativeResponse.Error.Message)
 	}
 	return nativeResponse.Result, nil
 }
