@@ -32,11 +32,11 @@ func (s *authSVC) GetValidToken(ctx context.Context, channelID string) (*model.A
 		return nil, errors.Wrapf(err, "failed to get a valid token")
 	}
 
-	if _, err := s.repo.Save(ctx, access); err != nil {
+	if _, err := s.repo.Save(ctx, *access); err != nil {
 		return nil, errors.Wrapf(err, "failed to get a valid token")
 	}
 
-	if _, err := s.repo.Save(ctx, refresh); err != nil {
+	if _, err := s.repo.Save(ctx, *refresh); err != nil {
 		return nil, errors.Wrapf(err, "failed to get a valid token")
 	}
 
@@ -58,26 +58,21 @@ func (s *authSVC) tryAccessToken(ctx context.Context, channelID string) (*model.
 }
 
 func (s *authSVC) tryRefreshToken(ctx context.Context, channelID string) (*model.AccessToken, *model.RefreshToken, error) {
-	rt, err := s.repo.Get(ctx, &model.RefreshToken{ChannelID: channelID})
-	if err != nil {
-		if a, r, err := s.issueToken(ctx, channelID); err != nil {
-			return nil, nil, errors.Wrapf(err, "failed to issue a new token")
+	if rt, err := s.repo.Get(ctx, &model.RefreshToken{ChannelID: channelID}); err == nil {
+		v, ok := rt.(model.RefreshToken)
+		if !ok {
+			return nil, nil, errors.Wrapf(err, "failed to refresh the token")
+		}
+
+		if a, r, err := s.refreshToken(ctx, v); err != nil {
+			return nil, nil, errors.Wrapf(err, "failed to refresh the token")
 		} else {
 			return a, r, nil
 		}
 	}
 
-	v, ok := rt.(model.RefreshToken)
-	if !ok {
-		if a, r, err := s.issueToken(ctx, channelID); err != nil {
-			return nil, nil, errors.Wrapf(err, "failed to issue a new token")
-		} else {
-			return a, r, nil
-		}
-	}
-
-	if a, r, err := s.refreshToken(ctx, v); err != nil {
-		return nil, nil, errors.Wrapf(err, "failed to refresh the token")
+	if a, r, err := s.issueToken(ctx, channelID); err != nil {
+		return nil, nil, errors.Wrapf(err, "failed to issue a new token")
 	} else {
 		return a, r, nil
 	}

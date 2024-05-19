@@ -145,8 +145,7 @@ func (h *Handler) sendAsBot(
 	if err != nil {
 		return &dto.JsonFunctionResponse{
 			Error: &dto.Error{
-				Message: err.Error(),
-				// Message: "failed to send message as a bot",
+				Message: "failed to send message as a bot",
 			},
 		}
 	}
