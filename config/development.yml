@@ -8,7 +8,7 @@ clientId: # client id for manager type; legacy
 api:
   public:
     http:
-      port: 3021
+      port: 3022
 
 appStore:
   baseUrl: http://localhost:3020
