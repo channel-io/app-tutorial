@@ -6,6 +6,6 @@ export default defineConfig({
   base: '',
   plugins: [react()],
   build: {
-    outDir: '../resource/wam',
+    outDir: '../api/public/route/wam/resources/wam',
   },
 })
