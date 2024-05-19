@@ -8,7 +8,6 @@ type Config struct {
 	Stage     string `required:"true" name:"config.stage"`
 	AppID     string `required:"false"`
 	AppSecret string `required:"true"`
-	ClientID  string `required:"false"`
 	Meta      struct {
 		Version   string
 		Commit    string

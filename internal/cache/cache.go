@@ -39,8 +39,8 @@ func Get() *Cache {
 	return cache
 }
 
-func (cc *Cache) Set(key string, value interface{}, duration time.Duration) {
-	cc.cache.SetWithTTL(key, value, 0, duration)
+func (cc *Cache) Set(key string, value interface{}, duration time.Duration) bool {
+	return cc.cache.SetWithTTL(key, value, 0, duration)
 }
 
 func (cc *Cache) Get(key string) (interface{}, bool) {

@@ -2,15 +2,16 @@ package repo
 
 import (
 	"context"
-	"errors"
 
 	"github.com/channel-io/app-tutorial/internal/auth/model"
 	"github.com/channel-io/app-tutorial/internal/cache"
+
+	"github.com/pkg/errors"
 )
 
 type AuthRepo interface {
 	Save(ctx context.Context, token model.Token) (model.Token, error)
-	Get(ctx context.Context, mock model.Token) (model.Token, error)
+	Get(ctx context.Context, token model.Token) (model.Token, error)
 }
 
 func NewAuthRepo(cache *cache.Cache) AuthRepo {
@@ -22,25 +23,21 @@ type authRepo struct {
 }
 
 func (r *authRepo) Save(ctx context.Context, token model.Token) (model.Token, error) {
-	r.cache.Set(token.Key(), token, token.Duration())
-
-	saved, err := r.Get(ctx, token)
-	if err != nil {
-		return nil, err
+	if ok := r.cache.Set(token.Key(), token, token.Duration()); !ok {
+		return nil, errors.Errorf("failed to save token, %s", token.Key())
 	}
-
-	return saved, nil
+	return token, nil
 }
 
-func (r *authRepo) Get(ctx context.Context, mock model.Token) (model.Token, error) {
-	v, found := r.cache.Get(mock.Key())
+func (r *authRepo) Get(ctx context.Context, key model.Token) (model.Token, error) {
+	v, found := r.cache.Get(key.Key())
 	if !found {
-		return nil, errors.New("token not found")
+		return nil, errors.Errorf("token %s not found", key.Key())
 	}
 
 	save, ok := v.(model.Token)
 	if !ok {
-		return nil, errors.New("invalid token")
+		return nil, errors.Errorf("invalid token, %v", v)
 	}
 
 	return save, nil

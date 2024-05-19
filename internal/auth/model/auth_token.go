@@ -7,17 +7,18 @@ import (
 	"github.com/channel-io/app-tutorial/internal/config"
 )
 
-type AppSecret string
-
 type Token interface {
 	Key() string
 	Duration() time.Duration
 }
 
-type AccessToken string
+type AccessToken struct {
+	ChannelID string
+	Token     string
+}
 
-func (AccessToken) Key() string {
-	return fmt.Sprintf("app-%s-access-token", config.Get().AppID)
+func (t AccessToken) Key() string {
+	return fmt.Sprintf("app-%s-access-token-%s", config.Get().AppID, t.ChannelID)
 }
 
 // real duration is 30 minutes
@@ -25,10 +26,13 @@ func (AccessToken) Duration() time.Duration {
 	return time.Minute*30 - time.Minute*1
 }
 
-type RefreshToken string
+type RefreshToken struct {
+	ChannelID string
+	Token     string
+}
 
-func (RefreshToken) Key() string {
-	return fmt.Sprintf("app-%s-refresh-token", config.Get().AppID)
+func (t RefreshToken) Key() string {
+	return fmt.Sprintf("app-%s-refresh-token-%s", config.Get().AppID, t.ChannelID)
 }
 
 // real duration is 7 days

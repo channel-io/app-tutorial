@@ -11,7 +11,7 @@ import (
 	"github.com/go-resty/resty/v2"
 )
 
-const path = "/admin/native/functions"
+const path = "/general/v1/native/functions"
 
 type AppStoreClient interface {
 	WriteGroupMessage(
