@@ -6,8 +6,9 @@ const StageDevelopment Stage = "development"
 
 type Config struct {
 	Stage     string `required:"true" name:"config.stage"`
-	AppID     string `required:"false"`
+	AppID     string `required:"true"`
 	AppSecret string `required:"true"`
+	ClientID  string `required:"true"` // legacy
 	Meta      struct {
 		Version   string
 		Commit    string

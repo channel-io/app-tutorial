@@ -5,12 +5,14 @@ import (
 
 	"github.com/channel-io/app-tutorial/api/public/route/function"
 	"github.com/channel-io/app-tutorial/api/public/route/ping"
+	"github.com/channel-io/app-tutorial/api/public/route/wam"
 	"github.com/channel-io/app-tutorial/internal/http"
 )
 
 var Option = fx.Provide(
 	route(ping.NewHandler),
 	route(function.NewHandler),
+	route(wam.NewHandler),
 )
 
 func route(fn interface{}) interface{} {

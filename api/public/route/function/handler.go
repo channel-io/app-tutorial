@@ -98,9 +98,10 @@ func (h *Handler) tutorial(
 	}
 
 	tutorialRes := dto.TutorialResult{
-		AppID:   cfg.AppID,
-		Name:    "tutorial",
-		WamArgs: wamArgs,
+		AppID:    cfg.AppID,
+		ClientID: cfg.ClientID,
+		Name:     "tutorial",
+		WamArgs:  wamArgs,
 	}
 
 	data, err := json.Marshal(tutorialRes)

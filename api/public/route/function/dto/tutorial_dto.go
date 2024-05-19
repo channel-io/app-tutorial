@@ -6,9 +6,10 @@ type TutorialWamArgs struct {
 }
 
 type TutorialResult struct {
-	AppID   string          `json:"appId"`
-	Name    string          `json:"name"`
-	WamArgs TutorialWamArgs `json:"wamArgs"`
+	AppID    string          `json:"appId"`
+	ClientID string          `json:"clientId"` // legacy
+	Name     string          `json:"name"`
+	WamArgs  TutorialWamArgs `json:"wamArgs"`
 }
 
 type SendAsBotParams struct {
