@@ -19,11 +19,11 @@ func NewHandler() *Handler {
 }
 
 func (h *Handler) Path() string {
-	return "/resource/wam"
+	return "/resource/wam/tutorial"
 }
 
 func (h *Handler) Register(router libhttp.Router) {
-	static, err := fs.Sub(resources, "resources/wam")
+	static, err := fs.Sub(resources, "resources/wam/tutorial")
 	if err != nil {
 		panic(err)
 	}
