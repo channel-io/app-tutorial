@@ -37,7 +37,11 @@ function Send() {
       switch (sender) {
         case 'bot':
           await callFunction(appId, 'sendAsBot', {
-            groupId: chatId,
+            input: {
+              groupId: chatId,
+              broadcast,
+              rootMessageId,
+            },
           })
           break
         case 'manager':

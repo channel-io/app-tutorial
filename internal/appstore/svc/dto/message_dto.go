@@ -5,6 +5,5 @@ type PlainTextGroupMessage struct {
 	GroupID       string
 	RootMessageID string
 	Broadcast     bool
-	IsPrivate     bool
 	Message       string
 }

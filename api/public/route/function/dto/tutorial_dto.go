@@ -13,7 +13,9 @@ type TutorialResult struct {
 }
 
 type SendAsBotParams struct {
-	GroupID string `json:"groupId"`
+	GroupID       string `json:"groupId"`
+	RootMessageID string `json:"rootMessageId"`
+	Broadcast     bool   `json:"broadcast"`
 }
 
 type SendAsBotResult struct {

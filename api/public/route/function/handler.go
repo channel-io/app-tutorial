@@ -138,9 +138,11 @@ func (h *Handler) sendAsBot(
 	_, err := h.client.WritePlainTextToGroup(
 		ctx,
 		appstoredto.PlainTextGroupMessage{
-			ChannelID: fnCtx.Channel.ID,
-			GroupID:   param.GroupID,
-			Message:   sendAsBotMsg,
+			ChannelID:     fnCtx.Channel.ID,
+			GroupID:       param.GroupID,
+			Broadcast:     param.Broadcast,
+			RootMessageID: param.RootMessageID,
+			Message:       sendAsBotMsg,
 		},
 	)
 	if err != nil {
