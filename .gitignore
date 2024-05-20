@@ -4,4 +4,4 @@
 **/bin
 node_modules
 
-/resource
+api/public/route/wam/resources/wam
