@@ -210,13 +210,13 @@ Note that both the success and the failure return `200 OK` for each request.
 
 ### wam
 
-| METHOD | PATH            |
-| ------ | --------------- |
-| -      | `/resource/wam` |
+| METHOD | PATH                     |
+| ------ | ------------------------ |
+| -      | `/resource/wam/tutorial` |
 
 This endpoint serves a static page of the wam.
 
-You must register it as a wamUrl of the app.
+You must register it(`/resource/wam`) as a wamUrl of the app.
 
 #### Response
 
