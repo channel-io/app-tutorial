@@ -305,19 +305,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@channel.io/bezier-icons@npm:^0.20.0":
-  version: 0.20.0
-  resolution: "@channel.io/bezier-icons@npm:0.20.0"
-  checksum: 10c0/f07331527bce5df40e6e805433802e4ba7f5d176389f178a7707ecff7b9e71a5ee38d4b6edd44418fd9141ad6023789b6e70092ec8c6a48fbce1f6733a66dc2f
+"@channel.io/bezier-icons@npm:^0.24.0":
+  version: 0.24.0
+  resolution: "@channel.io/bezier-icons@npm:0.24.0"
+  checksum: 10c0/12152ee8c7642a0785174cc5a399fceeb7a67112ceb224ff78542cd037a532db64de805092c3682df94bb6ee8af51e5e30c98263b1ea72d08286788d2eb298f1
   languageName: node
   linkType: hard
 
-"@channel.io/bezier-react@npm:^1.20.0":
-  version: 1.20.0
-  resolution: "@channel.io/bezier-react@npm:1.20.0"
+"@channel.io/bezier-react@npm:^2.0.5":
+  version: 2.0.5
+  resolution: "@channel.io/bezier-react@npm:2.0.5"
   dependencies:
+    "@channel.io/bezier-tokens": "npm:0.2.4"
     "@radix-ui/react-checkbox": "npm:^1.0.4"
-    "@radix-ui/react-dialog": "npm:^1.0.4"
+    "@radix-ui/react-dialog": "npm:^1.0.5"
     "@radix-ui/react-radio-group": "npm:^1.1.3"
     "@radix-ui/react-separator": "npm:^1.0.3"
     "@radix-ui/react-slider": "npm:^1.1.2"
@@ -325,22 +326,27 @@ __metadata:
     "@radix-ui/react-switch": "npm:^1.0.3"
     "@radix-ui/react-tabs": "npm:^1.0.4"
     "@radix-ui/react-toolbar": "npm:^1.0.4"
-    "@radix-ui/react-tooltip": "npm:^1.0.6"
+    "@radix-ui/react-tooltip": "npm:^1.0.7"
     "@radix-ui/react-visually-hidden": "npm:^1.0.3"
-    classnames: "npm:^2.3.2"
-    react-resize-detector: "npm:^9.1.0"
+    classnames: "npm:^2.5.1"
     react-textarea-autosize: "npm:8.3.4"
     ssr-window: "npm:^4.0.2"
-    uuid: "npm:^9.0.0"
+    uuid: "npm:^9.0.1"
   peerDependencies:
     "@channel.io/bezier-icons": ">=0.2.0"
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-    styled-components: ">=5"
   peerDependenciesMeta:
     "@channel.io/bezier-icons":
       optional: true
-  checksum: 10c0/47ad486166cb1900894c3b2c1e64e64798948cbea53fc3af92bbcf406c2667a229f432d6416f1b5a78a6ed246b075be040ba46d77443e7699b4ef1cb8f08d483
+  checksum: 10c0/7af554759c2c8cecc86ff6ce9905da57c4c818703bfabb0d645f0f465bfeae32f0fcbd59bb4404cde249ab361177d5e98df127c4fb2cd7d332e138ee868dfc76
+  languageName: node
+  linkType: hard
+
+"@channel.io/bezier-tokens@npm:0.2.4":
+  version: 0.2.4
+  resolution: "@channel.io/bezier-tokens@npm:0.2.4"
+  checksum: 10c0/e0a68ac1532e217ca1197790817e94947ae14e16c3f5669814b51e9822dd1f3bc7bb91af57529c08aa2ce5b53f1c5118fd35432b807b8599c2f8a25ab5a53f9e
   languageName: node
   linkType: hard
 
@@ -870,7 +876,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@radix-ui/react-dialog@npm:^1.0.4":
+"@radix-ui/react-dialog@npm:^1.0.5":
   version: 1.0.5
   resolution: "@radix-ui/react-dialog@npm:1.0.5"
   dependencies:
@@ -1335,7 +1341,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@radix-ui/react-tooltip@npm:^1.0.6":
+"@radix-ui/react-tooltip@npm:^1.0.7":
   version: 1.0.7
   resolution: "@radix-ui/react-tooltip@npm:1.0.7"
   dependencies:
@@ -1956,8 +1962,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "app-tutorial@workspace:."
   dependencies:
-    "@channel.io/bezier-icons": "npm:^0.20.0"
-    "@channel.io/bezier-react": "npm:^1.20.0"
+    "@channel.io/bezier-icons": "npm:^0.24.0"
+    "@channel.io/bezier-react": "npm:^2.0.5"
     "@types/react": "npm:^18.2.56"
     "@types/react-dom": "npm:^18.2.19"
     "@types/styled-components": "npm:^5.1.34"
@@ -2152,7 +2158,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"classnames@npm:^2.3.2":
+"classnames@npm:^2.5.1":
   version: 2.5.1
   resolution: "classnames@npm:2.5.1"
   checksum: 10c0/afff4f77e62cea2d79c39962980bf316bacb0d7c49e13a21adaadb9221e1c6b9d3cdb829d8bb1b23c406f4e740507f37e1dcf506f7e3b7113d17c5bab787aa69
@@ -3676,18 +3682,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-resize-detector@npm:^9.1.0":
-  version: 9.1.1
-  resolution: "react-resize-detector@npm:9.1.1"
-  dependencies:
-    lodash: "npm:^4.17.21"
-  peerDependencies:
-    react: ^16.0.0 || ^17.0.0 || ^18.0.0
-    react-dom: ^16.0.0 || ^17.0.0 || ^18.0.0
-  checksum: 10c0/6a85892fe46a12fc27b09b5bf5fcc1438f3196f70c75d4685b09eed2c68a2c853dd6eb792bf852038082505a3b4f05dba359055ee0baca3f8b59f022a85a368c
-  languageName: node
-  linkType: hard
-
 "react-style-singleton@npm:^2.2.1":
   version: 2.2.1
   resolution: "react-style-singleton@npm:2.2.1"
@@ -4252,7 +4246,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"uuid@npm:^9.0.0":
+"uuid@npm:^9.0.1":
   version: 9.0.1
   resolution: "uuid@npm:9.0.1"
   bin:

@@ -1,4 +1,4 @@
-import { styled } from '@channel.io/bezier-react'
+import styled from 'styled-components'
 
 import { isMobile } from '../../utils/userAgent'
 

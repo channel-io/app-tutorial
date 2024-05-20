@@ -1,18 +1,20 @@
 import { useEffect, useMemo, useCallback } from 'react'
 import {
-  AlphaStack,
+  VStack,
+  HStack,
   Button,
-  ButtonColorVariant,
-  ButtonStyleVariant,
   Text,
   Icon,
-  IconSize,
   ButtonGroup,
 } from '@channel.io/bezier-react'
-import { SendIcon } from '@channel.io/bezier-icons'
+import { CancelIcon, SendIcon } from '@channel.io/bezier-icons'
 
-import { callFunction, callNativeFunction, getWamData, setSize } from '../../utils/wam'
-import Header from '../../components/Header'
+import {
+  callFunction,
+  callNativeFunction,
+  getWamData,
+  setSize,
+} from '../../utils/wam'
 import * as Styled from './Send.styled'
 
 function Send() {
@@ -30,65 +32,76 @@ function Send() {
   const chatType = useMemo(() => getWamData('chatType') ?? '', [])
   const broadcast = useMemo(() => Boolean(getWamData('broadcast') ?? false), [])
   const rootMessageId = useMemo(() => getWamData('rootMessageId'), [])
-  const isPrivate = useMemo(() => Boolean(getWamData('isPrivate')), [])
 
-  const handleSend = useCallback(async (sender: string): Promise<void> => {
-    if (chatType === "group") {
-      switch (sender) {
-        case 'bot':
-          await callFunction(appId, 'sendAsBot', {
-            input: {
+  const handleSend = useCallback(
+    async (sender: string): Promise<void> => {
+      if (chatType === 'group') {
+        switch (sender) {
+          case 'bot':
+            await callFunction(appId, 'sendAsBot', {
+              input: {
+                groupId: chatId,
+                broadcast,
+                rootMessageId,
+              },
+            })
+            break
+          case 'manager':
+            await callNativeFunction('writeGroupMessageAsManager', {
+              channelId,
               groupId: chatId,
-              broadcast,
               rootMessageId,
-            },
-          })
-          break
-        case 'manager':
-          await callNativeFunction('writeGroupMessageAsManager', {
-            channelId,
-            groupId: chatId,
-            rootMessageId,
-            broadcast,
-            dto: {
-              plainText: message,
-              managerId,
-            },
-          })
-          break
-        default:
-          // NOTE: should not reach here
-          console.error('Invalid message sender')
+              broadcast,
+              dto: {
+                plainText: message,
+                managerId,
+              },
+            })
+            break
+          default:
+            // NOTE: should not reach here
+            console.error('Invalid message sender')
+        }
+      } else if (chatType === 'directChat') {
+        // FIXME: Implement
+      } else if (chatType === 'userChat') {
+        // FIXME: Implement
       }
-    }
-    // if (chatType === "directChat") {
-    // }
-    // if (chatType === "userChat") {
-    // }
-  }, [
-    appId,
-    broadcast,
-    channelId,
-    chatId,
-    chatType,
-    isPrivate,
-    managerId,
-    message,
-    rootMessageId,
-  ])
+    },
+    [
+      appId,
+      broadcast,
+      channelId,
+      chatId,
+      chatType,
+      managerId,
+      message,
+      rootMessageId,
+    ]
+  )
 
   return (
-    <AlphaStack
-      direction="vertical"
-      spacing={16}
-    >
-      <Header />
-      <AlphaStack direction="horizontal">
+    <VStack spacing={16}>
+      <HStack justify="between">
+        <Text
+          color="txt-black-darkest"
+          typo="24"
+          bold
+        >
+          Tutorial
+        </Text>
+        <Button
+          colorVariant="monochrome-dark"
+          styleVariant="tertiary"
+          leftContent={CancelIcon}
+          onClick={() => close()}
+        />
+      </HStack>
+      <HStack>
         <ButtonGroup>
           <Button
-            autoFocus
-            colorVariant={ButtonColorVariant.Blue}
-            styleVariant={ButtonStyleVariant.Primary}
+            colorVariant="blue"
+            styleVariant="primary"
             text="Send as a manager"
             onClick={async () => {
               await handleSend('manager')
@@ -96,9 +109,8 @@ function Send() {
             }}
           />
           <Button
-            autoFocus
-            colorVariant={ButtonColorVariant.Blue}
-            styleVariant={ButtonStyleVariant.Primary}
+            colorVariant="blue"
+            styleVariant="primary"
             text="Send as a bot"
             onClick={async () => {
               await handleSend('bot')
@@ -106,13 +118,13 @@ function Send() {
             }}
           />
         </ButtonGroup>
-      </AlphaStack>
-      <AlphaStack direction='horizontal'>
+      </HStack>
+      <HStack>
         <Styled.CenterTextWrapper>
           <Icon
             source={SendIcon}
             color="txt-black-dark"
-            size={IconSize.XS}
+            size="xs"
           />
           <Text
             as="span"
@@ -121,8 +133,8 @@ function Send() {
             {chatTitle}
           </Text>
         </Styled.CenterTextWrapper>
-      </AlphaStack>
-    </AlphaStack>
+      </HStack>
+    </VStack>
   )
 }
 
