@@ -97,7 +97,7 @@ function Send() {
           onClick={() => close()}
         />
       </HStack>
-      <HStack>
+      <HStack justify="center">
         <ButtonGroup>
           <Button
             colorVariant="blue"
@@ -119,7 +119,7 @@ function Send() {
           />
         </ButtonGroup>
       </HStack>
-      <HStack>
+      <HStack justify="center">
         <Styled.CenterTextWrapper>
           <Icon
             source={SendIcon}
