@@ -2,7 +2,7 @@ package dto
 
 type IssueTokenParams struct {
 	Secret    string `json:"secret"`
-	ChannelID string `json:"channelId"`
+	ChannelID string `json:"channelId,omitempty"`
 }
 
 type RefreshTokenParams struct {

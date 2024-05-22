@@ -13,6 +13,7 @@ import (
 )
 
 type AppStoreSVC interface {
+	RegisterCommands(ctx context.Context) (json.RawMessage, error)
 	WritePlainTextToGroup(ctx context.Context, msg dto.PlainTextGroupMessage) (json.RawMessage, error)
 }
 
@@ -23,6 +24,23 @@ func NewAppStoreSVC(client infra.AppStoreClient, svc svc.AuthSVC) AppStoreSVC {
 type appStoreSVC struct {
 	client infra.AppStoreClient
 	svc    svc.AuthSVC
+}
+
+func (s *appStoreSVC) RegisterCommands(ctx context.Context) (json.RawMessage, error) {
+	token, err := s.svc.GetAppToken(ctx)
+	if err != nil {
+		return nil, errors.Wrapf(err, "failed to register commands")
+	}
+	if token == "" {
+		return nil, errors.New("empty token")
+	}
+
+	resp, err := s.client.RegisterCommands(ctx, token)
+	if err != nil {
+		return nil, errors.Wrapf(err, "failed to register commands")
+	}
+
+	return resp, nil
 }
 
 func (s *appStoreSVC) WritePlainTextToGroup(

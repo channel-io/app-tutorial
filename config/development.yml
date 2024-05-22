@@ -3,8 +3,6 @@ stage: development
 appId: # app id registered in app-store
 appSecret: # app secret issued by a manager
 
-clientId: # client id for manager type; legacy
-
 api:
   public:
     http:

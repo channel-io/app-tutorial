@@ -1,11 +1,13 @@
 package main
 
 import (
+	"context"
 	"log"
 
 	"github.com/channel-io/app-tutorial/api/public"
 	"github.com/channel-io/app-tutorial/internal"
 
+	"github.com/channel-io/app-tutorial/internal/appstore/svc"
 	"github.com/channel-io/app-tutorial/internal/config"
 	"github.com/channel-io/app-tutorial/internal/http"
 
@@ -19,6 +21,7 @@ func main() {
 	fx.New(
 		public.HTTPServerModule(),
 		internalModule(),
+		fx.Invoke(registerCommands),
 		fx.Invoke(printLog),
 		fx.Invoke(
 			fx.Annotate(
@@ -36,6 +39,13 @@ func internalModule() fx.Option {
 		"internal",
 		internal.Option,
 	)
+}
+
+func registerCommands(appStoreSvc svc.AppStoreSVC) {
+	_, err := appStoreSvc.RegisterCommands(context.Background())
+	if err != nil {
+		panic(err)
+	}
 }
 
 func printLog(
