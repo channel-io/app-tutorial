@@ -15,6 +15,7 @@ import (
 const path = "/general/v1/native/functions"
 
 type AppStoreClient interface {
+	RegisterCommands(ctx context.Context, token string) (json.RawMessage, error)
 	WriteGroupMessage(ctx context.Context, token string, params dto.WriteGroupMessageParams) (json.RawMessage, error)
 }
 
@@ -28,6 +29,48 @@ func NewAppStoreClient(client *resty.Client, e *config.Config) AppStoreClient {
 
 type appStoreClient struct {
 	*resty.Client
+}
+
+func (c *appStoreClient) RegisterCommands(
+	ctx context.Context,
+	token string,
+) (json.RawMessage, error) {
+	commands := []dto.Command{
+		{
+			Name:               "tutorial",
+			Scope:              "desk",
+			Description:        "This is a desk command of App-tutorial",
+			ActionFunctionName: "tutorial",
+			ALFMode:            "disable",
+		},
+		// {
+		// 	Name:               "tutorial",
+		// 	Scope:              "front",
+		// 	Description:        "This is a front command of App-tutorial",
+		// 	ActionFunctionName: "tutorial",
+		// 	ALFMode:            "disable",
+		// },
+	}
+
+	resp, err := c.R().
+		SetContext(ctx).
+		SetHeader("x-access-token", token).
+		SetBody(
+			native.NativeFunctionRequest[dto.RegisterCommandsParam]{
+				Method: "registerCommands",
+				Params: dto.RegisterCommandsParam{
+					AppID:           config.Get().AppID,
+					EnableByDefault: true,
+					Commands:        commands,
+				},
+			},
+		).
+		Put(path)
+	if err != nil || resp.IsError() {
+		return nil, errors.Wrapf(err, "failed to request registerCommands")
+	}
+
+	return unmarshalJson(resp, &native.NativeFunctionResponse{})
 }
 
 func (c *appStoreClient) WriteGroupMessage(

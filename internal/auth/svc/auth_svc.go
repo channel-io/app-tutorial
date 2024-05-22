@@ -10,6 +10,7 @@ import (
 )
 
 type AuthSVC interface {
+	GetAppToken(ctx context.Context) (string, error)
 	GetValidToken(ctx context.Context, channelID string) (*model.AccessToken, error)
 }
 
@@ -20,6 +21,14 @@ type authSVC struct {
 
 func NewAuthSVC(client infra.AuthClient, repo repo.AuthRepo) AuthSVC {
 	return &authSVC{client, repo}
+}
+
+func (s *authSVC) GetAppToken(ctx context.Context) (string, error) {
+	token, err := s.client.IssueAppToken(ctx)
+	if err != nil {
+		return "", err
+	}
+	return token.AccessToken, nil
 }
 
 func (s *authSVC) GetValidToken(ctx context.Context, channelID string) (*model.AccessToken, error) {
