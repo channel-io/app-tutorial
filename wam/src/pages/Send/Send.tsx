@@ -19,7 +19,7 @@ import * as Styled from './Send.styled'
 
 function Send() {
   useEffect(() => {
-    setSize(390, 404)
+    setSize(390, 172)
   }, [])
 
   const chatTitle = useMemo(() => getWamData('chatTitle') ?? '', [])
