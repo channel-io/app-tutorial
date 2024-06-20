@@ -6,10 +6,10 @@ type Command struct {
 	Description        string `json:"description"`
 	ActionFunctionName string `json:"actionFunctionName"`
 	ALFMode            string `json:"alfMode"`
+	EnabledByDefault   bool   `json:"enabledByDefault"`
 }
 
 type RegisterCommandsParam struct {
-	AppID           string    `json:"appId"`
-	EnableByDefault bool      `json:"enableByDefault"`
-	Commands        []Command `json:"commands"`
+	AppID    string    `json:"appId"`
+	Commands []Command `json:"commands"`
 }

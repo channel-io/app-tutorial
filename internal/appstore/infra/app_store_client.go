@@ -42,6 +42,7 @@ func (c *appStoreClient) RegisterCommands(
 			Description:        "This is a desk command of App-tutorial",
 			ActionFunctionName: "tutorial",
 			ALFMode:            "disable",
+			EnabledByDefault:   true,
 		},
 		// {
 		// 	Name:               "tutorial",
@@ -49,6 +50,7 @@ func (c *appStoreClient) RegisterCommands(
 		// 	Description:        "This is a front command of App-tutorial",
 		// 	ActionFunctionName: "tutorial",
 		// 	ALFMode:            "disable",
+		// 	EnabledByDefault:   true,
 		// },
 	}
 
@@ -59,9 +61,8 @@ func (c *appStoreClient) RegisterCommands(
 			native.NativeFunctionRequest[dto.RegisterCommandsParam]{
 				Method: "registerCommands",
 				Params: dto.RegisterCommandsParam{
-					AppID:           config.Get().AppID,
-					EnableByDefault: true,
-					Commands:        commands,
+					AppID:    config.Get().AppID,
+					Commands: commands,
 				},
 			},
 		).
