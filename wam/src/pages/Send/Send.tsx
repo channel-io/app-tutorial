@@ -12,6 +12,7 @@ import { CancelIcon, SendIcon } from '@channel.io/bezier-icons'
 import {
   callFunction,
   callNativeFunction,
+  close,
   getWamData,
   setSize,
 } from '../../utils/wam'
