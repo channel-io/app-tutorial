@@ -1,6 +1,6 @@
 export function getWamData(key: string) {
-  if (typeof window.getWamData === 'function') {
-    return window.getWamData(key)
+  if (typeof window.ChannelIOWam.getWamData === 'function') {
+    return window.ChannelIOWam.getWamData(key)
   }
   return undefined
 }
@@ -10,19 +10,19 @@ export function close(
   name?: string,
   params?: Record<string, any>
 ) {
-  if (typeof window.close === 'function') {
+  if (typeof window.ChannelIOWam.close === 'function') {
     if (appId && name) {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      return window.close({ appId, name, params })
+      return window.ChannelIOWam.close({ appId, name, params })
     }
-    return window.close()
+    return window.ChannelIOWam.close()
   }
 }
 
 export function setSize(width: number, height: number) {
-  if (typeof window.setSize === 'function') {
-    return window.setSize({ width, height })
+  if (typeof window.ChannelIOWam.setSize === 'function') {
+    return window.ChannelIOWam.setSize({ width, height })
   }
 }
 
@@ -31,8 +31,8 @@ export async function callFunction(
   name: string,
   params: Record<string, any>
 ) {
-  if (typeof window.callFunction === 'function') {
-    return window.callFunction({ appId, name, params })
+  if (typeof window.ChannelIOWam.callFunction === 'function') {
+    return window.ChannelIOWam.callFunction({ appId, name, params })
   }
   return Promise.reject()
 }
@@ -41,8 +41,8 @@ export async function callNativeFunction(
   name: string,
   params: Record<string, any>
 ) {
-  if (typeof window.callNativeFunction === 'function') {
-    return window.callNativeFunction({ name, params })
+  if (typeof window.ChannelIOWam.callNativeFunction === 'function') {
+    return window.ChannelIOWam.callNativeFunction({ name, params })
   }
   return Promise.reject()
 }
@@ -52,7 +52,7 @@ export function callCommand(
   name: string,
   params: Record<string, any>
 ) {
-  if (typeof window.callCommand === 'function') {
-    return window.callCommand({ appId, name, params })
+  if (typeof window.ChannelIOWam.callCommand === 'function') {
+    return window.ChannelIOWam.callCommand({ appId, name, params })
   }
 }

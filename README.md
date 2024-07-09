@@ -119,6 +119,8 @@ Note that `context` in the function request is automatically full by the Channel
 
 #### Request
 
+_NOTE:The values in the context field of the request body will be automatically populated by the App Store._
+
 1. tutorial (to prepare wam arguments before opening the wam)
 
 ```json
@@ -127,6 +129,10 @@ Note that `context` in the function request is automatically full by the Channel
     "context": {
         "channel": {
             "id": "channel id which calls the wam"
+        },
+        "caller": {
+            "type": "manager",
+            "id": "manager id which calls the wam"
         }
     }
 }
@@ -143,12 +149,18 @@ You can set the name of the bot with [configuration](config) files.
     "method": "sendAsBot",
     "params": {
         "input": {
-            "groupId": "group id to write a message"
+            "groupId": "group id to write a message",
+            "rootMessageId": "thread id",
+            "broadcast": false
         }
     },
     "context": {
         "channel": {
             "id": "channel id which calls the wam"
+        },
+        "caller": {
+            "type": "manager",
+            "id": "manager id which calls the wam"
         }
     }
 }

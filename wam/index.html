@@ -23,7 +23,7 @@
       src="/src/main.tsx"
     ></script>
     <script>
-      var appearance = getWamData('appearance')
+      var appearance = window.ChannelIOWam.getWamData('appearance')
       if (appearance === 'dark') {
         document.body.style.backgroundColor = '#464748'
       } else {
