@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/channel-io/app-tutorial/api/public/route/function/dto"
+	"github.com/channel-io/app-tutorial/internal/appstore"
 	"github.com/channel-io/app-tutorial/internal/appstore/svc"
 	"github.com/channel-io/app-tutorial/internal/config"
 	libhttp "github.com/channel-io/app-tutorial/internal/http"
@@ -57,9 +58,9 @@ func (h *Handler) Function(ctx *gin.Context) {
 	var res *dto.JsonFunctionResponse
 	switch req.Method {
 	case tutorialMethod:
-		res = h.tutorial(ctx, req.Params.Input, req.Context)
+		res = h.tutorial(ctx, req.Params, req.Context)
 	case sendAsBotMethod:
-		res = h.sendAsBot(ctx, req.Params.Input, req.Context)
+		res = h.sendAsBot(ctx, req.Params, req.Context)
 	default:
 		ctx.JSON(
 			http.StatusOK,
@@ -77,7 +78,7 @@ func (h *Handler) Function(ctx *gin.Context) {
 
 func (h *Handler) tutorial(
 	_ context.Context,
-	_ json.RawMessage,
+	params dto.FunctionParams,
 	fnCtx dto.Context,
 ) *dto.JsonFunctionResponse {
 	manager := fnCtx.Caller
@@ -92,10 +93,14 @@ func (h *Handler) tutorial(
 
 	cfg := config.Get()
 
-	wamArgs := dto.TutorialWamArgs{
-		Message:   tutorialMsg,
-		ManagerID: manager.ID,
+	wamArgs := map[string]string{}
+	for _, k := range appstore.DefaultWamArgs() {
+		if attr, ok := params.Trigger.Attributes[k]; ok {
+			wamArgs[k] = attr
+		}
 	}
+	wamArgs["managerId"] = manager.ID
+	wamArgs["message"] = tutorialMsg
 
 	tutorialRes := dto.TutorialResult{
 		AppID:   cfg.AppID,
@@ -122,11 +127,11 @@ func (h *Handler) tutorial(
 
 func (h *Handler) sendAsBot(
 	ctx context.Context,
-	params json.RawMessage,
+	params dto.FunctionParams,
 	fnCtx dto.Context,
 ) *dto.JsonFunctionResponse {
 	var param dto.SendAsBotParams
-	if err := json.Unmarshal(params, &param); err != nil {
+	if err := json.Unmarshal(params.Input, &param); err != nil {
 		return &dto.JsonFunctionResponse{
 			Error: &dto.Error{
 				Message: "failed to unmarshal the function",
