@@ -9,7 +9,7 @@ api:
       port: 3022
 
 appStore:
-  baseUrl: http://localhost:3020
+  baseUrl: https://app-store-api.channel.io
 
 bot:
   name: AppTutorialBot
