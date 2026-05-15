@@ -1,0 +1,25 @@
+{
+  "name": "cht-app-google-calendar",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Channel Talk App - Google Calendar integration",
+  "scripts": {
+    "build": "pnpm --filter server build",
+    "type-check": "pnpm --filter server type-check",
+    "verify": "pnpm type-check && pnpm build",
+    "dev": "pnpm --filter server dev",
+    "server": "pnpm --filter server dev",
+    "start": "pnpm --filter server start",
+    "clean": "pnpm --filter server clean",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,yml,yaml}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,yml,yaml}\""
+  },
+  "engines": {
+    "node": ">=22.0.0",
+    "pnpm": ">=9.0.0"
+  },
+  "packageManager": "pnpm@9.15.0",
+  "devDependencies": {
+    "prettier": "^3.4.2"
+  }
+}

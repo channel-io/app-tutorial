@@ -1,5 +1,5 @@
 appStore:
   url: https://app-store-api.exp.channel.io
 runtime:
-  nodeEnv: development
-  debug: true
+  nodeEnv: production
+  debug: false

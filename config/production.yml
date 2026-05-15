@@ -1,0 +1,5 @@
+appStore:
+  url: https://app-store-api.channel.io
+runtime:
+  nodeEnv: production
+  debug: false

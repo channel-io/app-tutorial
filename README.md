@@ -1,237 +1,83 @@
-# app-tutorial
+# cht-app-google-calendar
 
-Hello, world!
+Google Calendar integration app for Channel Talk App Store.
 
-This project is a tutorial to develop app-server of Channel Corp. App Store.
+This branch replaces the old Go tutorial app with a TypeScript/Nest server that follows the
+same shape as `cht-app-coupang`: the app registers itself through `@channel.io/app-sdk-server`,
+uses the OAuth extension for Google credentials, uses the config extension for calendar defaults,
+and exposes standalone `calendar.*` functions for channel-level automation.
 
-Thank you for visiting. 😁
+## OAuth
 
-| Index                         |                                                       |
-| ----------------------------- | ----------------------------------------------------- |
-| [Prerequisite](#prerequisite) | -                                                     |
-| [Installation](#installation) | -                                                     |
-| [Build](#build)               | # [Build the whole project](#build-the-whole-project) |
-|                               | # [Build only the wam](#build-only-wam)               |
-| [APIs](#apis)                 | # [ping](#ping)                                       |
-|                               | # [functions](#functions)                             |
-|                               | # [wam(static)](#wam)                                 |
+The OAuth extension returns AppStore SSOT metadata and does not keep Google client credentials in
+code. Client ID and Client Secret are managed from Desk/AppStore settings.
 
-## Prerequisite
+Requested Google scopes:
 
-- [go](https://go.dev/) v1.21
-- [yarn](https://yarnpkg.com/) v4; Check [here](wam) for wam.
+- `https://www.googleapis.com/auth/calendar.calendarlist.readonly`
+- `https://www.googleapis.com/auth/calendar.freebusy`
+- `https://www.googleapis.com/auth/calendar.events`
 
-## Installation
+The app uses channel-level OAuth. A channel connects one shared Google account, and AppStore injects
+that OAuth token into `calendar.*` function calls.
 
-It is available to download the necessary packages for the project by running one of the following commands:
+## Config
 
-1. Use makefile.
+The config extension stores non-secret runtime settings only:
 
-```sh
-$ make init
+- default calendar ID
+- default timezone
+- default event duration
+- team calendar IDs, selected from visible calendars or entered manually
+- meeting room calendar IDs, selected from visible calendars or entered manually
+
+Calendar and room choices are loaded with the connected OAuth token from calendars visible to that
+Google account. This covers calendars the account owns, subscribes to, or has been granted access
+to. It does not enumerate every Google Workspace resource calendar in the domain; full room/resource
+inventory would require Admin SDK/Directory API permissions and admin setup. Calendar IDs that are
+not visible can still be pasted into the additional ID fields.
+
+## Functions
+
+Registered OAuth extension functions:
+
+- `extension.oauth.metadata.getAuthConfig`
+- `extension.oauth.validation.validateCredentials`
+
+Registered config extension functions:
+
+- `extension.config.metadata.getConfigSchema`
+- `extension.config.validation.validateStoredConfig`
+
+Available app functions:
+
+- `calendar.listCalendars`
+- `calendar.listCalendarChoices`
+- `calendar.listRoomCalendarChoices`
+- `calendar.listEvents`
+- `calendar.getFreeBusy`
+- `calendar.findAvailableSlots`
+- `calendar.findAvailableRooms`
+- `calendar.createEvent`
+- `calendar.updateEvent`
+
+Meeting rooms can be found with `calendar.findAvailableRooms` when room calendar IDs are configured
+or visible in the connected account's calendar list.
+
+## Development
+
+```bash
+pnpm install
+pnpm dev
 ```
 
-2. Use go cli.
+Required environment:
 
-```sh
-$ go mod tidy
+```bash
+APP_ID=...
+APP_SECRET=...
+APP_STORE_URL=https://app-store-api.channel.io
 ```
 
-## Build
-
-### Build the whole project
-
-```sh
-$ make build # it builds wam, either.
-```
-
-### Build only wam
-
-```sh
-$ make build-wam
-```
-
-## Run
-
-### Configuration
-
-Before running the program, make sure to check the [configuration](config/development.yml) file.
-
-You must prepare the metadata of the app by registering one to Channel App Store.
-
-```yaml
-stage: development # name of the env
-
-appId: # app id registered in advance
-appSecret: # app secret issued in advance
-
-api:
-  public:
-    http:
-      port: 3022 # port number of the server
-
-appStore:
-  baseUrl: # api endpoint of the Channel App Store
-
-bot:
-  name: AppTutorialBot # bot name to write messages in groups
-```
-
-### Run the program
-
-```sh
-$ STAGE="your stage" make dev
-```
-
-The default setting for the stage is `development`.
-
-## APIs
-
-### ping
-
-| METHOD | PATH    |
-| ------ | ------- |
-| GET    | `/ping` |
-
-#### Request
-
-```json
-(empty)
-```
-
-#### Response
-
-```text
-pong
-```
-
-### functions
-
-| METHOD | PATH         |
-| ------ | ------------ |
-| PUT    | `/functions` |
-
-This api is to request general functions defined in the project.
-
-You must register it as a functionUrl of the app.
-
-Note that `context` in the function request is automatically full by the Channel App Store.
-
-#### Request
-
-_NOTE:The values in the context field of the request body will be automatically populated by the App Store._
-
-1. tutorial (to prepare wam arguments before opening the wam)
-
-```json
-{
-    "method": "tutorial",
-    "context": {
-        "channel": {
-            "id": "channel id which calls the wam"
-        },
-        "caller": {
-            "type": "manager",
-            "id": "manager id which calls the wam"
-        }
-    }
-}
-```
-
-2. sendAsBot
-
-`sendAsBot` is a function to write message as a bot.
-
-You can set the name of the bot with [configuration](config) files.
-
-```json
-{
-    "method": "sendAsBot",
-    "params": {
-        "input": {
-            "groupId": "group id to write a message",
-            "rootMessageId": "thread id",
-            "broadcast": false
-        }
-    },
-    "context": {
-        "channel": {
-            "id": "channel id which calls the wam"
-        },
-        "caller": {
-            "type": "manager",
-            "id": "manager id which calls the wam"
-        }
-    }
-}
-```
-
-#### Response
-
-_**Success**_
-
-```
-200 OK
-```
-
-1. tutorial
-
-```json
-{
-    "result": {
-        "type": "wam",
-        "attributes": {
-            "appId": "app id",
-            "name": "tutorial",
-            "wamArgs": {
-                "managerId": "4761",
-                "message": "This is a test message sent by a manager."
-            }
-        }
-    }
-}
-```
-
-2. sendAsBot
-
-```json
-{
-  "result": {
-        "type": "string",
-        "attributes": {}
-  }
-}
-```
-
-_**Failure**_
-
-```
-200 OK
-```
-
-```json
-{
-    "error": {
-        "type": "",
-        "message": "the reason of the failure"
-    }
-}
-```
-
-Note that both the success and the failure return `200 OK` for each request.
-
-### wam
-
-| METHOD | PATH                     |
-| ------ | ------------------------ |
-| -      | `/resource/wam/tutorial` |
-
-This endpoint serves a static page of the wam.
-
-You must register it(`/resource/wam`) as a wamUrl of the app.
-
-#### Response
-
-```
-The wam written in HTML.
-```
+See `.env.example` for optional env fallbacks. App config takes precedence over env fallbacks, and
+callers can still pass calendar and room IDs directly through function params.

@@ -1,7 +1,11 @@
-.idea
 .DS_Store
+.idea
 
-**/bin
 node_modules
+dist
+.env
+.env.*
+!.env.example
 
-api/public/route/wam/resources/wam/tutorial
+coverage
+*.log
