@@ -20,7 +20,7 @@ concurrency:
 jobs:
   build-and-check:
     name: Build & Quality Checks
-    runs-on: channel-runner
+    runs-on: channel-runner-arm64
     timeout-minutes: 20
 
     steps:
@@ -53,7 +53,7 @@ jobs:
 
   security-check:
     name: Security Check
-    runs-on: channel-runner
+    runs-on: channel-runner-arm64
     timeout-minutes: 5
     needs: build-and-check
 
