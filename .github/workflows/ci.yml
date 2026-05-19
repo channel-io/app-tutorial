@@ -51,9 +51,135 @@ jobs:
         if: github.event_name == 'push'
         uses: docker/setup-qemu-action@v3
 
-      - name: Push image
+      - name: Determine stage and tag
         if: github.event_name == 'push'
-        uses: channel-io/ch-github-actions/docker-build-push@v1
+        id: setup
+        shell: bash
+        run: |
+          case "$GITHUB_REF" in
+            refs/heads/main|refs/heads/master|refs/tags/*)
+              stage=production
+              ;;
+            refs/heads/exp)
+              stage=exp
+              ;;
+            refs/heads/feature/*|refs/heads/features/*)
+              stage=feature
+              ;;
+            *)
+              echo "cannot determine stage for ref: $GITHUB_REF."
+              exit 1
+              ;;
+          esac
+
+          if [ "$stage" = "production" ]; then
+            tag="${GITHUB_REF_NAME//\//-}"
+          else
+            tag="$stage-${GITHUB_SHA::10}"
+          fi
+
+          echo "stage=$stage" >> "$GITHUB_OUTPUT"
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+
+      - name: Configure AWS credentials for registry
+        if: github.event_name == 'push'
+        id: ecr-creds
+        uses: aws-actions/configure-aws-credentials@v6
+        env:
+          AWS_ACCOUNT_ID: ${{ steps.setup.outputs.stage == 'production' && '882639023316' || '360732775913' }}
+        with:
+          role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/github-actions-role
+          role-session-name: ${{ github.event.repository.name }}-github-actions
+          aws-region: ap-northeast-2
+          output-credentials: true
+
+      - name: Login to Amazon ECR
+        if: github.event_name == 'push'
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Set up Docker Buildx
+        if: github.event_name == 'push'
+        id: buildx
+        uses: docker/setup-buildx-action@v4
+
+      - name: Get current time
+        if: github.event_name == 'push'
+        id: time
+        shell: sh
+        run: |
+          echo current_time=$(TZ=Asia/Seoul date +'%Y-%m-%dT%H:%M:%S%z') >> "$GITHUB_OUTPUT"
+
+      - name: Configure AWS credentials for s3
+        if: github.event_name == 'push' && steps.setup.outputs.stage == 'production'
+        uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: arn:aws:iam::360732775913:role/github-actions-role
+          role-session-name: ${{ github.event.repository.name }}-github-actions
+          aws-region: ap-northeast-2
+
+      - name: Build image and push to AWS ECR
+        if: github.event_name == 'push'
+        id: build-push
+        continue-on-error: true
+        uses: docker/build-push-action@v7
+        with:
+          builder: ${{ steps.buildx.outputs.name }}
+          context: .
+          file: ./deploy/Dockerfile
+          push: true
+          tags: ${{ steps.login-ecr.outputs.registry }}/${{ github.event.repository.name }}:${{ steps.setup.outputs.tag }}
+          platforms: linux/arm64
+          cache-from: |
+            type=s3,region=ap-northeast-2,bucket=exp-github-actions,prefix=docker/,name=${{ github.sha }}
+            type=s3,region=ap-northeast-2,bucket=exp-github-actions,prefix=docker/,name=${{ github.repository }}/${{ github.ref }}
+          cache-to: type=s3,region=ap-northeast-2,bucket=exp-github-actions,prefix=docker/,mode=max,name=${{ github.sha }};${{ github.repository }}/${{ github.ref }}
+          build-args: |
+            BUILD_VERSION=${{ github.ref_name }}
+            BUILD_COMMIT=${{ github.sha }}
+            BUILD_TIME=${{ steps.time.outputs.current_time }}
+
+      - name: Create ECR repository if not exists
+        if: github.event_name == 'push' && steps.build-push.outcome == 'failure'
+        shell: bash
+        run: |
+          echo "Build and push failed, checking if ECR repository exists..."
+          if ! aws ecr describe-repositories --repository-names ${{ github.event.repository.name }} >/dev/null 2>&1; then
+            echo "ECR repository ${{ github.event.repository.name }} does not exist, creating..."
+            aws ecr create-repository \
+              --repository-name ${{ github.event.repository.name }} \
+              --image-tag-mutability IMMUTABLE \
+              --image-scanning-configuration scanOnPush=true \
+              --tags Key=CreatedBy,Value=github-action
+            echo "ECR repository ${{ github.event.repository.name }} created successfully"
+          else
+            echo "ECR repository ${{ github.event.repository.name }} already exists"
+            exit 1
+          fi
+        env:
+          AWS_ACCESS_KEY_ID: ${{ steps.ecr-creds.outputs.aws-access-key-id }}
+          AWS_SECRET_ACCESS_KEY: ${{ steps.ecr-creds.outputs.aws-secret-access-key }}
+          AWS_SESSION_TOKEN: ${{ steps.ecr-creds.outputs.aws-session-token }}
+          AWS_REGION: ap-northeast-2
+
+      - name: Retry build image and push to AWS ECR
+        if: github.event_name == 'push' && steps.build-push.outcome == 'failure'
+        uses: docker/build-push-action@v7
+        with:
+          builder: ${{ steps.buildx.outputs.name }}
+          context: .
+          file: ./deploy/Dockerfile
+          push: true
+          tags: ${{ steps.login-ecr.outputs.registry }}/${{ github.event.repository.name }}:${{ steps.setup.outputs.tag }}
+          platforms: linux/arm64
+          cache-from: |
+            type=s3,region=ap-northeast-2,bucket=exp-github-actions,prefix=docker/,name=${{ github.sha }}
+            type=s3,region=ap-northeast-2,bucket=exp-github-actions,prefix=docker/,name=${{ github.repository }}/${{ github.ref }}
+          cache-to: type=s3,region=ap-northeast-2,bucket=exp-github-actions,prefix=docker/,mode=max,name=${{ github.sha }};${{ github.repository }}/${{ github.ref }}
+          build-args: |
+            BUILD_VERSION=${{ github.ref_name }}
+            BUILD_COMMIT=${{ github.sha }}
+            BUILD_TIME=${{ steps.time.outputs.current_time }}
 
   security-check:
     name: Security Check
