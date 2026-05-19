@@ -20,7 +20,7 @@ concurrency:
 jobs:
   build-and-check:
     name: Build & Quality Checks
-    runs-on: channel-runner-arm64
+    runs-on: ubuntu-latest
     timeout-minutes: 20
 
     steps:
@@ -47,13 +47,17 @@ jobs:
       - name: Format check
         run: pnpm format:check
 
+      - name: Set up QEMU
+        if: github.event_name == 'push'
+        uses: docker/setup-qemu-action@v3
+
       - name: Push image
         if: github.event_name == 'push'
         uses: channel-io/ch-github-actions/docker-build-push@v1
 
   security-check:
     name: Security Check
-    runs-on: channel-runner-arm64
+    runs-on: ubuntu-latest
     timeout-minutes: 5
     needs: build-and-check
 
