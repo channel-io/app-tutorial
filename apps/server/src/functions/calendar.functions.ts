@@ -569,9 +569,9 @@ function mapCalendarChoice(calendar: GoogleCalendarListEntry): ConfigChoice {
 function withPrimaryAlias(choices: ConfigChoice[]): ConfigChoice[] {
   return [
     {
-      label: "Primary calendar",
+      label: "기본 캘린더",
       value: "primary",
-      description: "Google Calendar primary alias for the connected account",
+      description: "연동된 계정의 Google Calendar primary alias입니다.",
     },
     ...choices,
   ];

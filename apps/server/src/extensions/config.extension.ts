@@ -21,24 +21,24 @@ export class GoogleCalendarConfigExtension implements ConfigExtensionInterface {
       schemaVersion: "v1",
       configScope: "channel",
       providerName: "Calendar",
-      title: "Calendar settings",
+      title: "Google Calendar 설정",
       description:
-        "Set the default calendar, timezone, team calendars, and meeting room calendars used by calendar functions.",
+        "calendar 함수에서 사용할 기본 캘린더, 시간대, 팀 캘린더, 회의실 캘린더를 설정합니다.",
       blocks: [
         {
           type: "section",
-          title: "Defaults",
-          description: "These values are independent from OAuth credentials.",
+          title: "기본값",
+          description: "OAuth 연동 정보와 별도로 저장되는 설정입니다.",
         },
         {
           type: "select",
           key: "defaultCalendarId",
-          label: "Default calendar",
+          label: "기본 캘린더",
           helperText:
-            "Calendar used when a function call does not pass calendarId. Choices load from calendars visible to the connected account.",
+            "function 호출에 calendarId가 없을 때 사용할 캘린더입니다. 연동된 계정에서 보이는 캘린더를 불러옵니다.",
           storageClass: "config",
           defaultValue: "primary",
-          choices: [{ label: "Primary calendar", value: "primary" }],
+          choices: [{ label: "기본 캘린더", value: "primary" }],
           choicesSource: {
             type: "function",
             functionName: "calendar.listCalendarChoices",
@@ -48,7 +48,7 @@ export class GoogleCalendarConfigExtension implements ConfigExtensionInterface {
         {
           type: "text",
           key: "defaultTimezone",
-          label: "Default timezone",
+          label: "기본 시간대",
           placeholder: "Asia/Seoul",
           storageClass: "config",
           defaultValue: "Asia/Seoul",
@@ -56,8 +56,8 @@ export class GoogleCalendarConfigExtension implements ConfigExtensionInterface {
         {
           type: "number",
           key: "defaultEventDurationMinutes",
-          label: "Default event duration",
-          helperText: "Used by calendar.findAvailableSlots when durationMinutes is omitted.",
+          label: "기본 일정 길이",
+          helperText: "calendar.findAvailableSlots에서 durationMinutes가 없을 때 사용합니다.",
           storageClass: "config",
           defaultValue: 30,
           min: 5,
@@ -66,16 +66,16 @@ export class GoogleCalendarConfigExtension implements ConfigExtensionInterface {
         },
         {
           type: "section",
-          title: "Calendars",
+          title: "캘린더",
           description:
-            "Choose visible calendars for team availability. Meeting rooms can be discovered from visible room calendars or expanded from Google Groups.",
+            "팀 참석 가능 시간을 볼 때 사용할 캘린더를 선택합니다. 회의실은 보이는 회의실 캘린더에서 찾거나 Google Groups로 확장할 수 있습니다.",
         },
         {
           type: "multiselect",
           key: "teamCalendarIds",
-          label: "Team calendars",
+          label: "팀 캘린더",
           helperText:
-            "Used by free/busy and slot search when calendarIds are omitted. Choices load from calendars visible to the connected account.",
+            "calendarIds가 없을 때 free/busy 조회와 빈 시간 찾기에 사용합니다. 연동된 계정에서 보이는 캘린더를 불러옵니다.",
           storageClass: "config",
           choicesSource: {
             type: "function",
@@ -86,17 +86,17 @@ export class GoogleCalendarConfigExtension implements ConfigExtensionInterface {
         {
           type: "textarea",
           key: "additionalTeamCalendarIds",
-          label: "Additional team calendar IDs",
-          helperText: "Comma-separated calendar IDs that are not available in the visible list.",
+          label: "추가 팀 캘린더 ID",
+          helperText: "목록에 보이지 않는 캘린더 ID를 쉼표로 구분해 입력합니다.",
           storageClass: "config",
           rows: 3,
         },
         {
           type: "multiselect",
           key: "roomCalendarIds",
-          label: "Pinned meeting rooms",
+          label: "고정 회의실",
           helperText:
-            "Optional. Choices load from visible calendars that look like rooms. If omitted, room search can infer visible room calendars automatically.",
+            "선택 사항입니다. 회의실처럼 보이는 캘린더를 불러옵니다. 비워두면 회의실 검색 시 보이는 회의실 캘린더를 자동으로 추론합니다.",
           storageClass: "config",
           choicesSource: {
             type: "function",
@@ -107,9 +107,9 @@ export class GoogleCalendarConfigExtension implements ConfigExtensionInterface {
         {
           type: "textarea",
           key: "roomCalendarGroupIds",
-          label: "Meeting room groups",
+          label: "회의실 Google Groups",
           helperText:
-            "Optional comma-separated Google Groups that contain room/resource calendars. This avoids entering every room calendar ID one by one.",
+            "선택 사항입니다. 회의실/resource 캘린더가 포함된 Google Groups를 쉼표로 구분해 입력합니다. 회의실 캘린더 ID를 하나씩 넣지 않아도 됩니다.",
           storageClass: "config",
           rows: 3,
         },
@@ -131,7 +131,7 @@ export class GoogleCalendarConfigExtension implements ConfigExtensionInterface {
           {
             fieldKey: "defaultEventDurationMinutes",
             reasonCode: "invalid_duration",
-            message: "Default event duration must be an integer between 5 and 480 minutes.",
+            message: "기본 일정 길이는 5분에서 480분 사이의 정수여야 합니다.",
           },
         ],
       };

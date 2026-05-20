@@ -58,7 +58,7 @@ export class GoogleOAuthExtension {
         scopes: [...GOOGLE_CALENDAR_SCOPES],
         providerName: "Google Calendar",
         providerDescription:
-          "Google Calendar calendars, free/busy lookup, event management, and domain directory lookup",
+          "Google Calendar 캘린더, free/busy 조회, 일정 관리, Google Workspace directory 조회",
         parameterCase: "snake",
         tokenRequestContentType: "form",
       },
