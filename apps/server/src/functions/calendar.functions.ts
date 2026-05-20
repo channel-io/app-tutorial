@@ -771,10 +771,17 @@ function expandGroupCalendarIds(
 function isLikelyRoomCalendar(calendar: GoogleCalendarListEntry): boolean {
   const haystack = `${calendar.id} ${calendar.summary ?? ""}`.toLowerCase();
   return (
+    haystack.includes("@resource.calendar.google.com") ||
     haystack.includes("room") ||
     haystack.includes("회의실") ||
+    haystack.includes("미팅룸") ||
     haystack.includes("meeting room") ||
-    haystack.includes("conference")
+    haystack.includes("conference") ||
+    haystack.includes("booth") ||
+    haystack.includes("부스") ||
+    haystack.includes("会議室") ||
+    haystack.includes("ミーティングルーム") ||
+    haystack.includes("ブース")
   );
 }
 
