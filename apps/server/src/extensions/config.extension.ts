@@ -23,12 +23,12 @@ export class GoogleCalendarConfigExtension implements ConfigExtensionInterface {
       providerName: "Calendar",
       title: "Google Calendar 설정",
       description:
-        "calendar 함수에서 사용할 기본 캘린더, 시간대, 팀 캘린더, 회의실 캘린더를 설정합니다.",
+        "calendar 함수에서 사용할 기본 캘린더, 시간대, 일정 길이를 설정합니다.",
       blocks: [
         {
           type: "section",
           title: "기본값",
-          description: "OAuth 연동 정보와 별도로 저장되는 설정입니다.",
+          description: "비워두면 기본값으로 동작합니다. OAuth 연동 정보와 별도로 저장됩니다.",
         },
         {
           type: "select",
@@ -63,55 +63,6 @@ export class GoogleCalendarConfigExtension implements ConfigExtensionInterface {
           min: 5,
           max: 480,
           step: 5,
-        },
-        {
-          type: "section",
-          title: "캘린더",
-          description:
-            "팀 참석 가능 시간을 볼 때 사용할 캘린더를 선택합니다. 회의실은 보이는 회의실 캘린더에서 찾거나 Google Groups로 확장할 수 있습니다.",
-        },
-        {
-          type: "multiselect",
-          key: "teamCalendarIds",
-          label: "팀 캘린더",
-          helperText:
-            "calendarIds가 없을 때 free/busy 조회와 빈 시간 찾기에 사용합니다. 연동된 계정에서 보이는 캘린더를 불러옵니다.",
-          storageClass: "config",
-          choicesSource: {
-            type: "function",
-            functionName: "calendar.listCalendarChoices",
-            triggerOnLoad: true,
-          },
-        },
-        {
-          type: "textarea",
-          key: "additionalTeamCalendarIds",
-          label: "추가 팀 캘린더 ID",
-          helperText: "목록에 보이지 않는 캘린더 ID를 쉼표로 구분해 입력합니다.",
-          storageClass: "config",
-          rows: 3,
-        },
-        {
-          type: "multiselect",
-          key: "roomCalendarIds",
-          label: "고정 회의실",
-          helperText:
-            "선택 사항입니다. 회의실처럼 보이는 캘린더를 불러옵니다. 비워두면 회의실 검색 시 보이는 회의실 캘린더를 자동으로 추론합니다.",
-          storageClass: "config",
-          choicesSource: {
-            type: "function",
-            functionName: "calendar.listRoomCalendarChoices",
-            triggerOnLoad: true,
-          },
-        },
-        {
-          type: "textarea",
-          key: "roomCalendarGroupIds",
-          label: "회의실 Google Groups",
-          helperText:
-            "선택 사항입니다. 회의실/resource 캘린더가 포함된 Google Groups를 쉼표로 구분해 입력합니다. 회의실 캘린더 ID를 하나씩 넣지 않아도 됩니다.",
-          storageClass: "config",
-          rows: 3,
         },
       ],
     };
