@@ -22,8 +22,7 @@ export class GoogleCalendarConfigExtension implements ConfigExtensionInterface {
       configScope: "channel",
       providerName: "Calendar",
       title: "Google Calendar 설정",
-      description:
-        "calendar 함수에서 사용할 기본 캘린더, 시간대, 일정 길이를 설정합니다.",
+      description: "calendar 함수에서 사용할 기본 캘린더, 시간대, 일정 길이를 설정합니다.",
       blocks: [
         {
           type: "section",
