@@ -1,4 +1,11 @@
-import { useEffect, useMemo, useCallback } from 'react'
+import { useEffect, useCallback, useState } from 'react'
+import {
+  useCallFunction,
+  useNativeFunction,
+  useTypedWamData,
+  useWamClose,
+  useWamSize,
+} from '@channel.io/app-sdk-wam'
 import {
   VStack,
   HStack,
@@ -9,46 +16,73 @@ import {
 } from '@channel.io/bezier-react'
 import { CancelIcon, SendIcon } from '@channel.io/bezier-icons'
 
-import {
-  callFunction,
-  callNativeFunction,
-  close,
-  getWamData,
-  setSize,
-} from '../../utils/wam'
 import * as Styled from './Send.styled'
 
 function Send() {
+  const { setSize } = useWamSize()
+  const { close } = useWamClose()
+  const [errorMessage, setErrorMessage] = useState('')
+
   useEffect(() => {
-    setSize(390, 172)
-  }, [])
+    setSize({ width: 390, height: 216 })
+  }, [setSize])
 
-  const chatTitle = useMemo(() => getWamData('chatTitle') ?? '', [])
+  const chatTitle = useTypedWamData('chatTitle') ?? ''
+  const appId = useTypedWamData('appId') ?? ''
+  const channelId = useTypedWamData('channelId') ?? ''
+  const managerId = useTypedWamData('managerId') ?? ''
+  const message = String(useTypedWamData('message') ?? '')
+  const chatId = useTypedWamData('chatId') ?? ''
+  const chatType = useTypedWamData('chatType') ?? ''
+  const broadcast = useTypedWamData('broadcast') ?? false
+  const rootMessageId = useTypedWamData('rootMessageId')
+  const targetToken = String(useTypedWamData('targetToken') ?? '')
 
-  const appId = useMemo(() => getWamData('appId') ?? '', [])
-  const channelId = useMemo(() => getWamData('channelId') ?? '', [])
-  const managerId = useMemo(() => getWamData('managerId') ?? '', [])
-  const message = useMemo(() => getWamData('message') ?? '', [])
-  const chatId = useMemo(() => getWamData('chatId') ?? '', [])
-  const chatType = useMemo(() => getWamData('chatType') ?? '', [])
-  const broadcast = useMemo(() => Boolean(getWamData('broadcast') ?? false), [])
-  const rootMessageId = useMemo(() => getWamData('rootMessageId'), [])
+  const {
+    call: sendAsBot,
+    loading: botLoading,
+    error: botError,
+  } = useCallFunction<void>({
+    appId,
+    name: 'tutorial.sendAsBot',
+  })
+  const {
+    call: sendAsManager,
+    loading: managerLoading,
+    error: managerError,
+  } = useNativeFunction<void>({ name: 'writeGroupMessageAsManager' })
+
+  const isSending = botLoading || managerLoading
+  const statusMessage =
+    errorMessage ||
+    (botError || managerError
+      ? 'The message could not be sent. Check the app permissions and try again.'
+      : chatType === 'group' && !targetToken
+        ? 'The bot target is unavailable. Close and reopen the command.'
+        : chatType && chatType !== 'group'
+          ? 'This tutorial sends messages only from a group chat.'
+          : '')
 
   const handleSend = useCallback(
-    async (sender: string): Promise<void> => {
-      if (chatType === 'group') {
+    async (sender: 'bot' | 'manager'): Promise<void> => {
+      setErrorMessage('')
+      if (chatType !== 'group') {
+        setErrorMessage('This tutorial sends messages only from a group chat.')
+        return
+      }
+
+      try {
         switch (sender) {
-          case 'bot':
-            await callFunction(appId, 'sendAsBot', {
-              input: {
-                groupId: chatId,
-                broadcast,
-                rootMessageId,
-              },
+          case 'bot': {
+            await sendAsBot({
+              targetToken,
+              broadcast,
+              rootMessageId,
             })
             break
-          case 'manager':
-            await callNativeFunction('writeGroupMessageAsManager', {
+          }
+          case 'manager': {
+            await sendAsManager({
               channelId,
               groupId: chatId,
               rootMessageId,
@@ -59,25 +93,27 @@ function Send() {
               },
             })
             break
-          default:
-            // NOTE: should not reach here
-            console.error('Invalid message sender')
+          }
         }
-      } else if (chatType === 'directChat') {
-        // FIXME: Implement
-      } else if (chatType === 'userChat') {
-        // FIXME: Implement
+        close()
+      } catch {
+        setErrorMessage(
+          'The message could not be sent. Check the app permissions and try again.'
+        )
       }
     },
     [
-      appId,
       broadcast,
       channelId,
       chatId,
       chatType,
+      close,
       managerId,
       message,
       rootMessageId,
+      sendAsBot,
+      sendAsManager,
+      targetToken,
     ]
   )
 
@@ -95,7 +131,7 @@ function Send() {
           colorVariant="monochrome-dark"
           styleVariant="tertiary"
           leftContent={CancelIcon}
-          onClick={() => close()}
+          onClick={close}
         />
       </HStack>
       <HStack justify="center">
@@ -104,19 +140,15 @@ function Send() {
             colorVariant="blue"
             styleVariant="primary"
             text="Send as a manager"
-            onClick={async () => {
-              await handleSend('manager')
-              close()
-            }}
+            disabled={chatType !== 'group' || isSending}
+            onClick={() => void handleSend('manager')}
           />
           <Button
             colorVariant="blue"
             styleVariant="primary"
             text="Send as a bot"
-            onClick={async () => {
-              await handleSend('bot')
-              close()
-            }}
+            disabled={chatType !== 'group' || isSending || !targetToken}
+            onClick={() => void handleSend('bot')}
           />
         </ButtonGroup>
       </HStack>
@@ -135,6 +167,11 @@ function Send() {
           </Text>
         </Styled.CenterTextWrapper>
       </HStack>
+      {statusMessage && (
+        <HStack justify="center">
+          <Text color="txt-black-dark">{statusMessage}</Text>
+        </HStack>
+      )}
     </VStack>
   )
 }
