@@ -1,24 +1,28 @@
-import { useEffect, useState } from 'react'
-import { AppProvider, type ThemeName } from '@channel.io/bezier-react'
-import { useWamData } from '@channel.io/app-sdk-wam'
+import {
+  HeightSynchronizer,
+  WamHeader,
+  WamThemeProvider,
+} from '@channel.io/app-sdk-wam-ui'
+import { useWamClose } from '@channel.io/app-sdk-wam'
 
 import { isMobile } from './utils/userAgent'
 import Send from './pages/Send'
 
 function App() {
-  const [theme, setTheme] = useState<ThemeName>('light')
-  const appearance = useWamData('appearance')
-
-  useEffect(() => {
-    setTheme(appearance === 'dark' ? 'dark' : 'light')
-  }, [appearance])
+  const { close } = useWamClose()
 
   return (
-    <AppProvider themeName={theme}>
-      <div style={{ padding: isMobile() ? '16px' : '0 24px 24px 24px' }}>
-        <Send />
-      </div>
-    </AppProvider>
+    <WamThemeProvider>
+      <HeightSynchronizer maxHeight={480}>
+        <WamHeader
+          title="Tutorial"
+          onClose={close}
+        />
+        <div style={{ padding: isMobile() ? '0 16px 16px' : '0 24px 24px' }}>
+          <Send />
+        </div>
+      </HeightSynchronizer>
+    </WamThemeProvider>
   )
 }
 
