@@ -14,7 +14,8 @@ import {
   Icon,
   ButtonGroup,
 } from '@channel.io/bezier-react'
-import { CancelIcon, SendIcon } from '@channel.io/bezier-icons'
+import { SendIcon } from '@channel.io/bezier-icons'
+import { InlineBanner } from '@channel.io/app-sdk-wam-ui'
 
 import * as Styled from './Send.styled'
 
@@ -24,7 +25,7 @@ function Send() {
   const [errorMessage, setErrorMessage] = useState('')
 
   useEffect(() => {
-    setSize({ width: 390, height: 216 })
+    setSize({ width: 390, height: 220 })
   }, [setSize])
 
   const chatTitle = useTypedWamData('chatTitle') ?? ''
@@ -119,21 +120,6 @@ function Send() {
 
   return (
     <VStack spacing={16}>
-      <HStack justify="between">
-        <Text
-          color="txt-black-darkest"
-          typo="24"
-          bold
-        >
-          Tutorial
-        </Text>
-        <Button
-          colorVariant="monochrome-dark"
-          styleVariant="tertiary"
-          leftContent={CancelIcon}
-          onClick={close}
-        />
-      </HStack>
       <HStack justify="center">
         <ButtonGroup>
           <Button
@@ -156,21 +142,22 @@ function Send() {
         <Styled.CenterTextWrapper>
           <Icon
             source={SendIcon}
-            color="txt-black-dark"
+            color="icon-neutral-heavy"
             size="xs"
           />
           <Text
             as="span"
-            color="txt-black-dark"
+            color="text-neutral-light"
           >
             {chatTitle}
           </Text>
         </Styled.CenterTextWrapper>
       </HStack>
       {statusMessage && (
-        <HStack justify="center">
-          <Text color="txt-black-dark">{statusMessage}</Text>
-        </HStack>
+        <InlineBanner
+          variant={errorMessage || botError || managerError ? 'error' : 'info'}
+          content={statusMessage}
+        />
       )}
     </VStack>
   )
