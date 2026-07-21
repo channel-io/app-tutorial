@@ -3,5 +3,9 @@
 
 **/bin
 node_modules
+.env
+wam/dist
+target
+**/.yarn/install-state.gz
 
 api/public/route/wam/resources/wam/tutorial

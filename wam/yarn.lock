@@ -305,6 +305,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@channel.io/app-sdk-wam@npm:0.17.0":
+  version: 0.17.0
+  resolution: "@channel.io/app-sdk-wam@npm:0.17.0"
+  peerDependencies:
+    react: ">=17.0.0"
+  checksum: 10c0/1e3e10b71d3f15826caf5bd2b2e1512f6089a2b45903d03aca0a549c427ce19072e80b4730dfc5ab81601ea08f8e05409de57deddf4a95a5914b47c65fe59d82
+  languageName: node
+  linkType: hard
+
 "@channel.io/bezier-icons@npm:^0.24.0":
   version: 0.24.0
   resolution: "@channel.io/bezier-icons@npm:0.24.0"
@@ -1962,6 +1971,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "app-tutorial@workspace:."
   dependencies:
+    "@channel.io/app-sdk-wam": "npm:0.17.0"
     "@channel.io/bezier-icons": "npm:^0.24.0"
     "@channel.io/bezier-react": "npm:^2.0.5"
     "@types/react": "npm:^18.2.56"
@@ -1976,6 +1986,7 @@ __metadata:
     prettier: "npm:^3.2.5"
     react: "npm:^18.2.0"
     react-dom: "npm:^18.2.0"
+    react-is: "npm:^18.2.0"
     styled-components: "npm:^5.3.5"
     typescript: "npm:^5.2.2"
     vite: "npm:^5.1.4"
@@ -3557,6 +3568,13 @@ __metadata:
   version: 16.13.1
   resolution: "react-is@npm:16.13.1"
   checksum: 10c0/33977da7a5f1a287936a0c85639fec6ca74f4f15ef1e59a6bc20338fc73dc69555381e211f7a3529b8150a1f71e4225525b41b60b52965bda53ce7d47377ada1
+  languageName: node
+  linkType: hard
+
+"react-is@npm:^18.2.0":
+  version: 18.3.1
+  resolution: "react-is@npm:18.3.1"
+  checksum: 10c0/f2f1e60010c683479e74c63f96b09fb41603527cd131a9959e2aee1e5a8b0caf270b365e5ca77d4a6b18aae659b60a86150bb3979073528877029b35aecd2072
   languageName: node
   linkType: hard
 
