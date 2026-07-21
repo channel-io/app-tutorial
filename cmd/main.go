@@ -48,6 +48,7 @@ func main() {
 	}
 
 	server := sdkgin.NewServer(sdkApp, serverOptions...)
+	mountAppStoreFunctionRoot(server)
 	server.Engine().GET("/ping", func(ctx *gin.Context) { ctx.String(200, "pong") })
 
 	wamDist, err := filepath.Abs("wam/dist")

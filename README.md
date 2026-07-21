@@ -54,6 +54,8 @@ contract:
 - `PUT /functions/:version` (`/functions/v1` here)
 - signature verification and SDK token lifecycle
 - AppStore extension registration after deployment
+- a narrow ingress compatibility route from bare `PUT /functions` calls to the same SDK handler,
+  matching the managed runtime gateway when the caller does not carry a system version
 
 A managed platform may own deployment and endpoint sync for generated projects. This standalone Go
 app pins the latest Go SDK release and exposes the same function and WAM endpoint roots itself.
@@ -99,6 +101,10 @@ before starting the auto-registering server:
 Do not append `/v1` or `/tutorial`. If credentials, permissions, or endpoints change after the
 server starts, restart the server so auto-registration runs again.
 
+The SDK route itself remains versioned. The tutorial also accepts bare `PUT /functions` through the
+same verified SDK handler because current command execution can call the configured Function
+Endpoint without a system-version suffix. Managed runtimes provide the same mapping at ingress.
+
 ## Build and run
 
 ```sh
@@ -129,6 +135,7 @@ a permission-failure case. Do not set `SKIP_SIGNATURE_VERIFICATION=true` outside
 
 ```text
 cmd/main.go                         SDK server and extension auto-registration
+cmd/function_endpoint.go            bare Function Endpoint compatibility route
 internal/tutorial/app.go           command metadata and typed app functions
 internal/tutorial/native_message.go one native transport adapter
 wam/src/pages/Send/Send.tsx         WAM SDK hooks for app/native calls
