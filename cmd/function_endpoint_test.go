@@ -7,8 +7,8 @@ import (
 	"strings"
 	"testing"
 
+	sdkgin "github.com/channel-io/app-sdk/go/server/gin"
 	"github.com/channel-io/app-tutorial/internal/tutorial"
-	sdkgin "github.com/channel-io/cht-app-sdk/go/server/gin"
 )
 
 type compatibilitySender struct{}

@@ -1,9 +1,11 @@
 # WAM
 
+[English](README.md) | [한국어](README.ko.md) | [日本語](README.ja.md)
+
 This React frontend uses
-[`@channel.io/app-sdk-wam`](https://github.com/channel-io/cht-app-sdk/tree/main/ts/packages/wam)
+[`@channel.io/app-sdk-wam`](https://github.com/channel-io/app-sdk/tree/main/ts/packages/wam)
 for the WAM bridge and
-[`@channel.io/app-sdk-wam-ui`](https://github.com/channel-io/cht-app-sdk/tree/main/ts/packages/wam-ui)
+[`@channel.io/app-sdk-wam-ui`](https://github.com/channel-io/app-sdk/tree/main/ts/packages/wam-ui)
 for WAM-specific theming, navigation, states, and content-height synchronization. Import
 general-purpose UI components directly from `@channel.io/bezier-react/beta`.
 
@@ -14,7 +16,7 @@ to access Channel APIs, and server-only runtime types are not shared.
 
 The example pins Bezier React `4.0.0-next.13` and Bezier Icons `0.60.0`. Bezier React 4 is still a
 prerelease, so keep the selected version explicit and check the
-[SDK WAM UI guide](https://github.com/channel-io/cht-app-sdk/blob/main/docs/reference/typescript/WAM-UI.md)
+[SDK WAM UI guide](https://github.com/channel-io/app-sdk/blob/main/docs/reference/typescript/WAM-UI.md)
 before upgrading it.
 
 ## Development
