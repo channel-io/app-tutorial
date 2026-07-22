@@ -7,9 +7,9 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/channel-io/app-sdk/go/native"
+	sdkgin "github.com/channel-io/app-sdk/go/server/gin"
 	"github.com/channel-io/app-tutorial/internal/tutorial"
-	"github.com/channel-io/cht-app-sdk/go/native"
-	sdkgin "github.com/channel-io/cht-app-sdk/go/server/gin"
 	"github.com/gin-gonic/gin"
 )
 

@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/channel-io/cht-app-sdk/go/appsdk"
+	"github.com/channel-io/app-sdk/go/appsdk"
 )
 
 type fakeSender struct {

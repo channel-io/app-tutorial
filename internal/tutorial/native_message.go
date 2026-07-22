@@ -9,7 +9,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/channel-io/cht-app-sdk/go/native"
+	"github.com/channel-io/app-sdk/go/native"
 )
 
 type NativeMessageSender struct {

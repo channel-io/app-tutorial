@@ -1,27 +1,32 @@
 # Channel App tutorial — Go
 
+[English](README.md) | [한국어](README.ko.md) | [日本語](README.ja.md)
+
 A minimal Channel App Store app built with the official
-[Channel App SDK](https://github.com/channel-io/cht-app-sdk). The tutorial uses the SDK for the
+[Channel App SDK](https://github.com/channel-io/app-sdk). The tutorial uses the SDK for the
 function registry, schemas, command extension, versioned HTTP route, extension auto-registration,
 token lifecycle, and request-signature verification.
 
 Use this repository for a runnable end-to-end app. Use the SDK repository for the API contract and
 design guidance:
 
-- [English app-development guide](https://github.com/channel-io/cht-app-sdk/blob/main/docs/guides/en/app-development.md)
-- [English concepts: Function, Extension, WAM, and authentication](https://github.com/channel-io/cht-app-sdk/blob/main/docs/guides/en/concepts.md)
-- [한국어 앱 개발 전체 가이드](https://github.com/channel-io/cht-app-sdk/blob/main/docs/guides/ko/app-development.md)
-- [한국어 핵심 개념](https://github.com/channel-io/cht-app-sdk/blob/main/docs/guides/ko/concepts.md)
-- [日本語アプリ開発完全ガイド](https://github.com/channel-io/cht-app-sdk/blob/main/docs/guides/ja/app-development.md)
-- [日本語の基本概念](https://github.com/channel-io/cht-app-sdk/blob/main/docs/guides/ja/concepts.md)
-- [Go feature parity](https://github.com/channel-io/cht-app-sdk/blob/main/docs/reference/go-feature-parity.md)
-- [Go SDK reference](https://github.com/channel-io/cht-app-sdk/blob/main/docs/reference/go/README.md)
-- [Go authentication and tokens](https://github.com/channel-io/cht-app-sdk/blob/main/docs/reference/go/AUTH-AND-TOKENS.md)
-- [WAM SDK](https://github.com/channel-io/cht-app-sdk/blob/main/docs/reference/typescript/WAM.md)
+- [English app-development guide](https://github.com/channel-io/app-sdk/blob/main/docs/guides/en/app-development.md)
+- [English concepts: Function, Extension, WAM, and authentication](https://github.com/channel-io/app-sdk/blob/main/docs/guides/en/concepts.md)
+- [English Extension guide](https://github.com/channel-io/app-sdk/blob/main/docs/guides/en/extensions.md)
+- [한국어 앱 개발 전체 가이드](https://github.com/channel-io/app-sdk/blob/main/docs/guides/ko/app-development.md)
+- [한국어 핵심 개념](https://github.com/channel-io/app-sdk/blob/main/docs/guides/ko/concepts.md)
+- [한국어 Extension 전체 가이드](https://github.com/channel-io/app-sdk/blob/main/docs/guides/ko/extensions.md)
+- [日本語アプリ開発完全ガイド](https://github.com/channel-io/app-sdk/blob/main/docs/guides/ja/app-development.md)
+- [日本語の基本概念](https://github.com/channel-io/app-sdk/blob/main/docs/guides/ja/concepts.md)
+- [日本語 Extension 完全ガイド](https://github.com/channel-io/app-sdk/blob/main/docs/guides/ja/extensions.md)
+- [Go feature parity](https://github.com/channel-io/app-sdk/blob/main/docs/reference/go-feature-parity.md)
+- [Go SDK reference](https://github.com/channel-io/app-sdk/blob/main/docs/reference/go/README.md)
+- [Go authentication and tokens](https://github.com/channel-io/app-sdk/blob/main/docs/reference/go/AUTH-AND-TOKENS.md)
+- [WAM SDK](https://github.com/channel-io/app-sdk/blob/main/docs/reference/typescript/WAM.md)
 
 ## What this app demonstrates
 
-- `github.com/channel-io/cht-app-sdk/go` `v0.13.14`
+- `github.com/channel-io/app-sdk/go` `v0.14.0`
 - a `command` extension registered through the SDK builder
 - typed app functions and generated JSON schemas
 - SDK-managed app/channel token caching and refresh
@@ -46,21 +51,18 @@ The Go SDK currently owns the token lifecycle but does not yet expose a typed pr
 transport adapter for that one native function; the rest of the old hand-written AppStore client,
 token repository, command registrar, and function router has been removed.
 
-## Runtime contract alignment
+## SDK contract alignment
 
-Some managed builders scaffold TypeScript/NestJS projects rather than Go projects. This tutorial
-does not copy a builder-specific directory template, but it follows the same public runtime
-contract:
+This tutorial follows the public SDK runtime contract:
 
 - SDK-owned typed function and extension discovery
 - `PUT /functions/:version` (`/functions/v1` here)
 - signature verification and SDK token lifecycle
 - AppStore extension registration after deployment
-- a narrow ingress compatibility route from bare `PUT /functions` calls to the same SDK handler,
-  matching the managed runtime gateway when the caller does not carry a system version
+- a narrow ingress compatibility route from bare `PUT /functions` calls to the same verified SDK
+  handler when the caller does not carry a system version
 
-A managed platform may own deployment and endpoint sync for generated projects. This standalone Go
-app pins the latest Go SDK release and exposes the same function and WAM endpoint roots itself.
+This app pins the latest Go SDK release and exposes the Function and WAM endpoint roots directly.
 
 ## Prerequisites
 
@@ -69,7 +71,7 @@ app pins the latest Go SDK release and exposes the same function and WAM endpoin
 - a private Channel App with an App ID, App Secret, and Signing Key
 
 If you do not have an app yet, follow the SDK's
-[private-app preparation sequence](https://github.com/channel-io/cht-app-sdk/blob/main/docs/guides/en/app-development.md#prepare-a-private-app-before-coding): create a development app, keep credentials server-side, enable the minimum permissions below, prepare endpoint roots, and install it in a test channel.
+[private-app preparation sequence](https://github.com/channel-io/app-sdk/blob/main/docs/guides/en/app-development.md#prepare-a-private-app-before-coding): create a development app, keep credentials server-side, enable the minimum permissions below, prepare endpoint roots, and install it in a test channel.
 
 Enable these permissions in the app's **Authentication and permissions** settings:
 
@@ -105,7 +107,7 @@ server starts, restart the server so auto-registration runs again.
 
 The SDK route itself remains versioned. The tutorial also accepts bare `PUT /functions` through the
 same verified SDK handler because current command execution can call the configured Function
-Endpoint without a system-version suffix. Managed runtimes provide the same mapping at ingress.
+Endpoint without a system-version suffix. Both paths reuse the same signature verification.
 
 ## Build and run
 
