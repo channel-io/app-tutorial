@@ -5,7 +5,7 @@ TARGET_BIN_DIR ?= ${TARGET_DIR}/bin
 GOOS ?= $(shell go env GOOS)
 GOARCH ?= $(shell go env GOARCH)
 
-.PHONY: init build-wam build-go build run dev test clean
+.PHONY: init build-wam build-go build run dev test test-go test-wam clean
 
 init:
 	go mod download
@@ -27,8 +27,13 @@ run:
 
 dev: build run
 
-test:
+test: test-go test-wam
+
+test-go:
 	go test ./...
+
+test-wam:
+	cd ${PROJECT_PATH}/wam && corepack yarn format:check && corepack yarn lint && corepack yarn typecheck
 
 clean:
 	rm -rf ${TARGET_DIR} ${PROJECT_PATH}/wam/dist

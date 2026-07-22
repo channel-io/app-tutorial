@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://channel.io/schemas/tutorial-wam-data.json",
+  "title": "Tutorial WAM data",
+  "description": "Public wire data shared by the Go tutorial server and its React WAM.",
+  "x-channel-wam-name": "tutorial",
+  "x-channel-functions": {
+    "open": "tutorial.open",
+    "sendAsBot": "tutorial.sendAsBot",
+    "writeAsManager": "writeGroupMessageAsManager"
+  },
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "appId": { "type": "string" },
+    "channelId": { "type": "string" },
+    "managerId": { "type": "string" },
+    "chatId": { "type": "string" },
+    "chatType": { "type": "string" },
+    "chatTitle": { "type": "string" },
+    "rootMessageId": { "type": "string" },
+    "broadcast": { "type": "boolean" },
+    "message": { "type": "string" },
+    "targetToken": { "type": "string" }
+  },
+  "required": [
+    "appId",
+    "channelId",
+    "managerId",
+    "chatId",
+    "chatType",
+    "chatTitle",
+    "broadcast",
+    "message"
+  ]
+}
