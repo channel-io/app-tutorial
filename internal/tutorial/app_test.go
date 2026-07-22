@@ -29,7 +29,7 @@ func TestTutorialAppUsesSDKFunctionRegistry(t *testing.T) {
 	}
 
 	open := app.HandleRequest(context.Background(), appsdk.FunctionRequest{
-		Method: "tutorial.open",
+		Method: TutorialOpenFunction,
 		Params: json.RawMessage(`{"chat":{"type":"group","id":"group"},"trigger":{"type":"command","attributes":{}},"input":{}}`),
 		Context: appsdk.Context{
 			Caller:  appsdk.Caller{Type: appsdk.CallerTypeManager, ID: "manager"},
@@ -53,7 +53,7 @@ func TestTutorialAppUsesSDKFunctionRegistry(t *testing.T) {
 	}
 
 	sent := app.HandleRequest(context.Background(), appsdk.FunctionRequest{
-		Method: "tutorial.sendAsBot",
+		Method: TutorialSendBotFunction,
 		Params: json.RawMessage(`{"targetToken":"` + targetToken + `"}`),
 		Context: appsdk.Context{
 			Caller:  appsdk.Caller{Type: appsdk.CallerTypeManager, ID: "manager"},
@@ -71,7 +71,7 @@ func TestTutorialAppUsesSDKFunctionRegistry(t *testing.T) {
 	}
 
 	rejected := app.HandleRequest(context.Background(), appsdk.FunctionRequest{
-		Method: "tutorial.sendAsBot",
+		Method: TutorialSendBotFunction,
 		Params: json.RawMessage(`{"targetToken":"` + targetToken + `tampered"}`),
 		Context: appsdk.Context{
 			Caller:  appsdk.Caller{Type: appsdk.CallerTypeManager, ID: "manager"},

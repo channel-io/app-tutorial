@@ -285,24 +285,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@channel.io/app-sdk-wam-ui@npm:0.3.0":
-  version: 0.3.0
-  resolution: "@channel.io/app-sdk-wam-ui@npm:0.3.0"
+"@channel.io/app-sdk-wam-ui@npm:0.4.0":
+  version: 0.4.0
+  resolution: "@channel.io/app-sdk-wam-ui@npm:0.4.0"
   peerDependencies:
     "@channel.io/bezier-icons": ">=0.60.0 <1.0.0"
     "@channel.io/bezier-react": ">=4.0.0-next.13 <5.0.0"
     react: ">=17.0.0"
     styled-components: ">=6.0.0"
-  checksum: 10c0/7b4a7e942574ee485585da7028200dedee3281d5c1386cf8ebac705a72140c8062124e9bf1e47c4993f1b80f8a3d6a427f8b76e660ae09574a1d159785dad63f
+  checksum: 10c0/0a919ac56b6de0d6a520662bf6591ce139fc143f0396d081e06cc93a5971b110d009aad6dc0af1aee58869ffd3a7c2c361568e19b512a4f46e9f12831166b973
   languageName: node
   linkType: hard
 
-"@channel.io/app-sdk-wam@npm:0.17.0":
-  version: 0.17.0
-  resolution: "@channel.io/app-sdk-wam@npm:0.17.0"
+"@channel.io/app-sdk-wam@npm:0.17.2":
+  version: 0.17.2
+  resolution: "@channel.io/app-sdk-wam@npm:0.17.2"
   peerDependencies:
     react: ">=17.0.0"
-  checksum: 10c0/1e3e10b71d3f15826caf5bd2b2e1512f6089a2b45903d03aca0a549c427ce19072e80b4730dfc5ab81601ea08f8e05409de57deddf4a95a5914b47c65fe59d82
+  checksum: 10c0/1a58120e45ad39339abe7f917d28807c725483c08e399b1abdb05ef32e266ea85dc9866804bac577a1cbcb38d3ebf9cdb5bb73863999aad95172014913762398
   languageName: node
   linkType: hard
 
@@ -1904,8 +1904,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "app-tutorial@workspace:."
   dependencies:
-    "@channel.io/app-sdk-wam": "npm:0.17.0"
-    "@channel.io/app-sdk-wam-ui": "npm:0.3.0"
+    "@channel.io/app-sdk-wam": "npm:0.17.2"
+    "@channel.io/app-sdk-wam-ui": "npm:0.4.0"
     "@channel.io/bezier-icons": "npm:0.60.0"
     "@channel.io/bezier-react": "npm:4.0.0-next.13"
     "@types/react": "npm:^18.2.56"

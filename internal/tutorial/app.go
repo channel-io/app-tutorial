@@ -60,18 +60,18 @@ func NewApp(cfg Config, sender MessageSender) (*appsdk.App, error) {
 	app := appsdk.New(appsdk.Options{AppID: cfg.AppID, AppSecret: cfg.AppSecret})
 	if err := app.Use(command.Extension().
 		GetCommands(command.StaticCommands(&command.Config{
-			Name:               "tutorial",
+			Name:               TutorialWAMName,
 			Scope:              command.ScopeDesk,
 			Description:        "Open the Channel App SDK tutorial WAM",
-			ActionFunctionName: "tutorial.open",
+			ActionFunctionName: TutorialOpenFunction,
 			AlfMode:            command.AlfModeDisable,
 			EnabledByDefault:   true,
 		})).
-		Execute("tutorial.open", openTutorial(cfg.AppID, cfg.AppSecret))); err != nil {
+		Execute(TutorialOpenFunction, openTutorial(cfg.AppID, cfg.AppSecret))); err != nil {
 		return nil, err
 	}
 
-	if err := appsdk.Register(app, "tutorial.sendAsBot",
+	if err := appsdk.Register(app, TutorialSendBotFunction,
 		func(ctx context.Context, fnCtx appsdk.Context, input *SendAsBotInput) (*EmptyOutput, error) {
 			target, err := readTutorialTargetToken(input.TargetToken, cfg.AppSecret)
 			if err != nil || target.ExpiresAt <= time.Now().Unix() ||
@@ -92,19 +92,16 @@ func NewApp(cfg Config, sender MessageSender) (*appsdk.App, error) {
 
 func openTutorial(appID, appSecret string) appsdk.TypedHandlerFunc[command.ExecuteRequest, command.ActionResult] {
 	return func(_ context.Context, fnCtx appsdk.Context, input *command.ExecuteRequest) (*command.ActionResult, error) {
-		wamArgs := map[string]any{
-			"managerId": fnCtx.Caller.ID,
-			"message":   tutorialMessage,
-		}
 		chat := input.GetChat()
-		if chat != nil {
-			wamArgs["chatId"] = chat.GetId()
-			wamArgs["chatType"] = chat.GetType()
-		}
-		if attributes := input.GetTrigger().GetAttributes(); attributes != nil {
-			wamArgs["chatTitle"] = attributes["chatTitle"]
-			wamArgs["rootMessageId"] = attributes["rootMessageId"]
-			wamArgs["broadcast"] = attributes["broadcast"] == "true"
+		triggerAttributes := input.GetTrigger().GetAttributes()
+		wamArgs := TutorialWAMArgs{
+			ManagerID:     fnCtx.Caller.ID,
+			ChatID:        chat.GetId(),
+			ChatType:      chat.GetType(),
+			ChatTitle:     triggerAttributes["chatTitle"],
+			RootMessageID: triggerAttributes["rootMessageId"],
+			Broadcast:     triggerAttributes["broadcast"] == "true",
+			Message:       tutorialMessage,
 		}
 		if chat.GetType() == "group" && chat.GetId() != "" &&
 			fnCtx.Caller.Type == appsdk.CallerTypeManager && fnCtx.Caller.ID != "" {
@@ -117,13 +114,13 @@ func openTutorial(appID, appSecret string) appsdk.TypedHandlerFunc[command.Execu
 			if err != nil {
 				return nil, err
 			}
-			wamArgs["targetToken"] = targetToken
+			wamArgs.TargetToken = targetToken
 		}
 
 		attributes, err := structpb.NewStruct(map[string]any{
 			"appId":   appID,
-			"name":    "tutorial",
-			"wamArgs": wamArgs,
+			"name":    TutorialWAMName,
+			"wamArgs": wamArgs.Map(),
 		})
 		if err != nil {
 			return nil, err

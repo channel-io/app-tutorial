@@ -26,7 +26,9 @@ design guidance:
 - typed app functions and generated JSON schemas
 - SDK-managed app/channel token caching and refresh
 - the SDK Gin server at `/functions/:version`
-- a React WAM using `@channel.io/app-sdk-wam` `0.17.0`
+- a React WAM using `@channel.io/app-sdk-wam` `0.17.2`
+- a language-neutral JSON Schema checked against both Go DTOs and TypeScript WAM data
+- redesigned Bezier components from `@channel.io/bezier-react/beta`
 
 Run the `/tutorial` desk command in a group chat to open a WAM. The WAM can send a team-chat message
 either through the app bot or as the current manager. Other chat types show an explicit unsupported
@@ -137,7 +139,10 @@ a permission-failure case. Do not set `SKIP_SIGNATURE_VERIFICATION=true` outside
 cmd/main.go                         SDK server and extension auto-registration
 cmd/function_endpoint.go            bare Function Endpoint compatibility route
 internal/tutorial/app.go           command metadata and typed app functions
+internal/tutorial/contracts.go     Go types and names for the public WAM contract
 internal/tutorial/native_message.go one native transport adapter
+contracts/                         language-neutral WAM wire schema
+wam/src/contracts.ts               TypeScript view and runtime validation of that schema
 wam/src/pages/Send/Send.tsx         WAM SDK hooks for app/native calls
 ```
 
