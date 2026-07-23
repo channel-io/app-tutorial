@@ -27,7 +27,7 @@ design guidance:
 
 ## What this app demonstrates
 
-- `github.com/channel-io/app-sdk/go` `v0.14.0`
+- the `github.com/channel-io/app-sdk/go` version pinned in `go.mod`
 - a `command` extension registered through the SDK builder
 - typed app functions and generated JSON schemas
 - SDK-managed app/channel token caching and refresh
@@ -47,10 +47,8 @@ Concepts in this repository map to concrete code as follows:
 - **WAM**: the React UI is served at `/resource/wam/tutorial`; `useCallFunction` calls the app server and `useNativeFunction` acts as the current manager.
 - **Authentication**: the SDK server verifies inbound signatures, `native.TokenManager` caches the channel token used by the bot path, the server signs the allowed group-chat target before giving it to the WAM, and the Channel host owns manager authorization.
 
-The Go SDK currently owns the token lifecycle but does not yet expose a typed proxy wrapper for
-`writeGroupMessage`. `internal/tutorial/native_message.go` is therefore a deliberately small
-transport adapter for that one native function; the rest of the old hand-written AppStore client,
-token repository, command registrar, and function router has been removed.
+The bot path obtains a channel token through `native.TokenManager` and calls
+`native.ProxyAPI.WriteGroupMessage`; the app does not implement Native Function HTTP transport.
 
 ## SDK contract alignment
 
@@ -151,12 +149,11 @@ cmd/main.go                         SDK server and extension auto-registration
 cmd/function_endpoint.go            bare Function Endpoint compatibility route
 internal/tutorial/app.go           command metadata and typed app functions
 internal/tutorial/contracts.go     Go types and names for the public WAM contract
-internal/tutorial/native_message.go one native transport adapter
+internal/tutorial/native_message.go SDK token manager and typed ProxyAPI call
 contracts/                         language-neutral WAM wire schema
 wam/src/contracts.ts               TypeScript view and runtime validation of that schema
 wam/src/pages/Send/Send.tsx         WAM SDK hooks for app/native calls
 ```
 
 Use the SDK guides and references for the current contract, and use this repository for its complete
-Go server-and-WAM implementation. The SDK quickstart links here and calls out the one native
-transport gap explicitly.
+Go server-and-WAM implementation. The SDK Quickstart links here as the runnable Go example.

@@ -31,7 +31,7 @@ func main() {
 		AppID:     cfg.AppID,
 		AppSecret: cfg.AppSecret,
 		BotName:   cfg.BotName,
-	}, tutorial.NewNativeMessageSender(tokenManager, cfg.AppStoreURL))
+	}, tutorial.NewNativeMessageSender(tokenManager, nativeClient))
 	if err != nil {
 		log.Fatal(err)
 	}

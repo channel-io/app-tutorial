@@ -19,7 +19,7 @@ auto-registration, token lifecycle, request signature 검증을 담당합니다.
 
 ## 이 앱에서 확인할 수 있는 것
 
-- `github.com/channel-io/app-sdk/go` `v0.14.0`
+- `go.mod`에 고정된 `github.com/channel-io/app-sdk/go` 버전
 - SDK builder로 등록하는 `command` Extension
 - Typed app Function과 생성되는 JSON Schema
 - SDK가 관리하는 app/channel token cache와 refresh
@@ -39,9 +39,9 @@ manager 권한으로 team-chat message를 보냅니다. 지원하지 않는 chat
 - **WAM**: React UI는 `/resource/wam/tutorial`에서 제공됩니다. `useCallFunction`은 app server를, `useNativeFunction`은 현재 manager 주체로 Channel을 호출합니다.
 - **인증**: SDK server가 inbound signature를 검증하고 `native.TokenManager`가 bot 경로의 channel token을 cache합니다. Server는 허용된 group-chat target에 짧은 signature를 붙여 WAM에 전달하며 manager authorization은 Channel host가 관리합니다.
 
-Go SDK는 token lifecycle을 관리하지만 아직 `writeGroupMessage` typed proxy wrapper를 제공하지
-않습니다. `internal/tutorial/native_message.go`는 이 native Function 하나만 격리한 transport
-adapter입니다. 나머지 token repository, command registrar, Function router는 SDK가 담당합니다.
+Bot 경로는 `native.TokenManager`로 channel token을 얻고
+`native.ProxyAPI.WriteGroupMessage`를 호출합니다. 앱이 Native Function HTTP transport를 직접
+구현하지 않습니다.
 
 ## SDK 계약
 
@@ -140,12 +140,11 @@ cmd/main.go                         SDK server와 Extension auto-registration
 cmd/function_endpoint.go            bare Function Endpoint compatibility route
 internal/tutorial/app.go           command metadata와 typed app Function
 internal/tutorial/contracts.go     public WAM contract의 Go type과 name
-internal/tutorial/native_message.go 하나의 native transport adapter
+internal/tutorial/native_message.go SDK token manager와 typed ProxyAPI 호출
 contracts/                         언어 중립 WAM wire schema
 wam/src/contracts.ts               TypeScript view와 runtime validation
 wam/src/pages/Send/Send.tsx         app/native call용 WAM SDK hook
 ```
 
 현재 계약은 SDK guide와 reference에서 확인하고, 완성된 Go server/WAM 구현은 이 저장소에서
-확인하세요. SDK Quickstart도 이 튜토리얼을 연결하며 Go native transport gap은 기능 동등성
-문서에서 명시합니다.
+확인하세요. SDK Quickstart도 이 튜토리얼을 실행 가능한 Go 예제로 연결합니다.

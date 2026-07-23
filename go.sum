@@ -2,8 +2,8 @@ github.com/bytedance/sonic v1.11.6 h1:oUp34TzMlL+OY1OUWxHqsdkgC/Zfc85zGqw9siXjrc
 github.com/bytedance/sonic v1.11.6/go.mod h1:LysEHSvpvDySVdC2f87zGWf6CIKJcAvqab1ZaiQtds4=
 github.com/bytedance/sonic/loader v0.1.1 h1:c+e5Pt1k/cy5wMveRDyk2X4B9hF4g7an8N3zCYjJFNM=
 github.com/bytedance/sonic/loader v0.1.1/go.mod h1:ncP89zfokxS5LZrJxl5z0UJcsk4M4yY2JpfqGeCtNLU=
-github.com/channel-io/app-sdk/go v0.14.0 h1:lmtHnhPXN3C4Pix+GGUk7v6tmpc1ThMz+kgEeIsVs9A=
-github.com/channel-io/app-sdk/go v0.14.0/go.mod h1:A/ATvjAeGsrttLIW6hn3ot63MjZ/kUZDw1FCGdPVNNk=
+github.com/channel-io/app-sdk/go v0.14.1-0.20260723153640-6dfd90dad8a1 h1:9UqsO45sjkfeWbHhsUDOXom1fQ9qU6fqfGwFxPOMB5s=
+github.com/channel-io/app-sdk/go v0.14.1-0.20260723153640-6dfd90dad8a1/go.mod h1:A/ATvjAeGsrttLIW6hn3ot63MjZ/kUZDw1FCGdPVNNk=
 github.com/cloudwego/base64x v0.1.4 h1:jwCgWpFanWmN8xoIUHa2rtzmkd5J2plF/dnLS6Xd/0Y=
 github.com/cloudwego/base64x v0.1.4/go.mod h1:0zlkT4Wn5C6NdauXdJRhSKRlJvmclQ1hhJgA0rcu/8w=
 github.com/cloudwego/iasm v0.2.0 h1:1KNIy1I1H9hNNFEEH3DVnI4UujN+1zjpuk6gwHLTssg=
