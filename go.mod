@@ -3,7 +3,7 @@ module github.com/channel-io/app-tutorial
 go 1.25.0
 
 require (
-	github.com/channel-io/app-sdk/go v0.14.0
+	github.com/channel-io/app-sdk/go v0.14.1-0.20260723153640-6dfd90dad8a1
 	github.com/gin-gonic/gin v1.10.1
 	google.golang.org/protobuf v1.36.11
 )
