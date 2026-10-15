@@ -9,11 +9,11 @@ GOARCH ?= $(shell go env GOARCH)
 
 init:
 	go mod download
-	cd ${PROJECT_PATH}/wam && corepack yarn install --immutable
+	cd ${PROJECT_PATH}/wam && corepack pnpm install --frozen-lockfile
 
 build-wam:
 	@echo "Building WAMs..."
-	cd ${PROJECT_PATH}/wam && corepack yarn build
+	cd ${PROJECT_PATH}/wam && corepack pnpm build
 
 build-go:
 	mkdir -p ${TARGET_BIN_DIR}
@@ -33,7 +33,7 @@ test-go:
 	go test ./...
 
 test-wam:
-	cd ${PROJECT_PATH}/wam && corepack yarn format:check && corepack yarn lint && corepack yarn typecheck
+	cd ${PROJECT_PATH}/wam && corepack pnpm format:check && corepack pnpm lint && corepack pnpm typecheck
 
 clean:
 	rm -rf ${TARGET_DIR} ${PROJECT_PATH}/wam/dist

@@ -1,5 +1,6 @@
 {
   "name": "app-tutorial",
+  "packageManager": "pnpm@11.24.0",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -33,5 +34,7 @@
     "typescript": "^5.2.2",
     "vite": "^5.1.4"
   },
-  "packageManager": "yarn@4.2.2"
+  "engines": {
+    "pnpm": ">=11.22.0"
+  }
 }

@@ -58,7 +58,7 @@ Bot path は `native.TokenManager` で channel token を取得し、
 ## 前提条件
 
 - Go 1.25
-- WAM 用 Node.js と Corepack 経由の Yarn 4
+- WAM 用 Node.js と Corepack 経由の pnpm 11
 - App ID、App Secret、Signing Key を持つ開発用 private Channel App
 
 アプリがまだない場合は SDK の
