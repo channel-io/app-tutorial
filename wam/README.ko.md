@@ -20,15 +20,15 @@ Go parity test가 field와 Function name을 확인하고 `src/contracts.ts`가 F
 ## 개발
 
 ```sh
-corepack yarn install --immutable
-corepack yarn dev
+corepack pnpm install --frozen-lockfile
+corepack pnpm dev
 ```
 
 WAM을 build하고 typecheck합니다.
 
 ```sh
-corepack yarn build
-corepack yarn typecheck
+corepack pnpm build
+corepack pnpm typecheck
 ```
 
 Build 결과는 `dist/`에 생성되고 Go tutorial server가

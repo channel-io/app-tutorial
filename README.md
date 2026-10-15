@@ -66,7 +66,7 @@ This app pins the latest Go SDK release and exposes the Function and WAM endpoin
 ## Prerequisites
 
 - Go 1.25
-- Node.js and Yarn 4 through Corepack (for the WAM)
+- Node.js and pnpm 11 through Corepack (for the WAM)
 - a private Channel App with an App ID, App Secret, and Signing Key
 
 If you do not have an app yet, start with the SDK's

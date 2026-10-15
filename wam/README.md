@@ -24,15 +24,15 @@ before upgrading it.
 Install dependencies and run the development server:
 
 ```sh
-corepack yarn install --immutable
-corepack yarn dev
+corepack pnpm install --frozen-lockfile
+corepack pnpm dev
 ```
 
 Build and type-check the WAM:
 
 ```sh
-corepack yarn build
-corepack yarn typecheck
+corepack pnpm build
+corepack pnpm typecheck
 ```
 
 The WAM output is written to `dist/`. The Go tutorial server exposes that directory below

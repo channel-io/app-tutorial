@@ -58,7 +58,7 @@ Bot 경로는 `native.TokenManager`로 channel token을 얻고
 ## 준비 사항
 
 - Go 1.25
-- WAM용 Node.js와 Corepack 기반 Yarn 4
+- WAM용 Node.js와 Corepack 기반 pnpm 11
 - App ID, App Secret, Signing Key가 있는 개발용 private Channel App
 
 앱이 아직 없다면 SDK의

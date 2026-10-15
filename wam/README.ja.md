@@ -21,15 +21,15 @@ Example は Bezier React `4.0.0-next.13` と Bezier Icons `0.60.0` を固定し�
 ## Development
 
 ```sh
-corepack yarn install --immutable
-corepack yarn dev
+corepack pnpm install --frozen-lockfile
+corepack pnpm dev
 ```
 
 WAM を build して typecheck します。
 
 ```sh
-corepack yarn build
-corepack yarn typecheck
+corepack pnpm build
+corepack pnpm typecheck
 ```
 
 Build output は `dist/` に生成され、Go tutorial server が
