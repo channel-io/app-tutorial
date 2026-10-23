@@ -1,3 +1,4 @@
 allowBuilds:
+  'esbuild@0.25.12': true
   'esbuild@0.19.12': true
 strictDepBuilds: true
